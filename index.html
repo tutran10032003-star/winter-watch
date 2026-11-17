@@ -469,6 +469,15 @@ footer{font-size:13px}
 @media(max-width:760px){.notice{align-items:flex-start;flex-direction:column;gap:5px;padding:15px 17px}.settings{padding:17px!important}.settings-grid{grid-template-columns:1fr!important}.settings-grid .field.span-2,.settings-grid .field.full{grid-column:span 1!important}.dispatch-stats{grid-template-columns:repeat(3,minmax(0,1fr))}.history-grid{grid-template-columns:1fr!important}.dispatch-hero h4{font-size:20px}.dispatch-route{align-items:flex-start}}
 
 
+
+/* Final presentation refinements: forecast interpretation and engineer notice */
+.notice{display:flex;flex-wrap:nowrap;align-items:center;gap:14px}
+.notice strong{white-space:nowrap;flex:0 0 auto}
+.notice span{flex:1 1 auto;min-width:0}
+#weather-detail p,.two>.card p:not(#history-findings p){background:#f8f9f4;border:1px solid #e5e3d7;border-radius:10px;padding:11px 14px;margin:10px 0;font-size:14.5px;line-height:1.65}
+#weather-detail p strong,.two>.card p strong{color:var(--navy);font-weight:750}
+@media(max-width:600px){.notice{align-items:flex-start;flex-wrap:wrap}.notice span{flex-basis:100%}}
+
 </style>
 </head>
 <body>
@@ -523,7 +532,7 @@ footer{font-size:13px}
 <div class="field"><label for="pin">Input price / 1M tokens (USD, optional)</label><input id="pin" inputmode="decimal"></div>
 <div class="field"><label for="pout">Output price / 1M tokens (USD, optional)</label><input id="pout" inputmode="decimal"></div>
 <div class="field"><label>&nbsp;</label><div class="actions"><button class="btn" id="save">Save settings</button><button class="btn secondary" id="forget">Forget key</button></div></div>
-</div><p class="muted" id="saved">Robin uses an external AI service to answer free-text questions. An API key is a private access code from that provider; it is not your ChatGPT password. Without a key, the Tonight, Weather, Depots and History dashboards still work, but Robin cannot generate answers. Never paste a key supplied by someone else or use a personal key on a shared device. This demo sends the key from your browser to the provider.</p><p class="muted settings-help"><strong>Get a free Gemini key:</strong> open <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">Google AI Studio</a>, sign in, click <em>Create API key</em>, copy it, paste it above and press Save. The key stays in this browser only; it is never part of this page's code.</p><p class="muted settings-help"><strong>About the prices:</strong> Input means the text sent to the AI; output means the AI reply. Providers charge per token. These optional prices are only used to estimate the cost of a chat; they do not set or control the provider's actual charges. Leave them blank if you do not know the rates.</p>
+</div><p class="muted" id="saved">Robin uses an external AI service to answer free-text questions. An API key is a private access code from the selected provider; it is not your ChatGPT password or ChatGPT subscription. Each person using this demo, including the Duty Engineer, should enter their own provider API key in this browser. Do not share your key, paste someone else’s key, commit it to GitHub, or use it on a shared device. Without a key, the Tonight, Weather, Depots and History dashboards still work, but Robin cannot generate answers. This demo stores the key in this browser’s local storage and sends it directly from your browser to the selected provider; it is not a secure secret vault.</p><p class="muted settings-help"><strong>Get a free Gemini key:</strong> open <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">Google AI Studio</a>, sign in, click <em>Create API key</em>, copy your own key, paste it above and press Save. The key is stored in this browser only and is not written into this page’s GitHub source code. Check the provider’s current usage limits and pricing.</p><p class="muted settings-help"><strong>About the prices:</strong> Input means the text sent to the AI; output means the AI reply. Providers charge per token. These optional prices are only used to estimate the cost of a chat; they do not set or control the provider's actual charges. Leave them blank if you do not know the rates.</p>
 </details>
 <footer>Winter Watch · Fictional County Cavan decision-support prototype · Open-Meteo forecast data</footer>
 </main>
