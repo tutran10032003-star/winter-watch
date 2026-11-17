@@ -1024,6 +1024,6 @@ async function sendChat(prompt){
 $("route-search").addEventListener("input",drawRouteTable);$("route-status").addEventListener("change",drawRouteTable);$("route-depot").addEventListener("change",drawRouteTable);$("clear-filters").onclick=()=>{$("route-search").value="";$("route-status").value="ALL";$("route-depot").value="ALL";drawRouteTable()};
 $("chat-launch").onclick=()=>{$("chatbox").classList.toggle("open");$("chat-launch").setAttribute("aria-expanded",String($("chatbox").classList.contains("open")))};$("chat-close").onclick=()=>{$("chatbox").classList.remove("open");$("chat-launch").setAttribute("aria-expanded","false")};$("chat-send").onclick=()=>sendChat();$("chat-input").addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();sendChat()}});document.querySelectorAll(".starter button").forEach(b=>b.onclick=()=>sendChat(b.dataset.prompt));
 runAnalysis();
->
+</script>
 </body>
 </html>
