@@ -388,19 +388,66 @@ function drawChart(hours){
  hours.forEach((a,i)=>{const xx=pad.l+i*cw/(hours.length-1);ctx.beginPath();ctx.arc(xx,y(a.ground),2.8,0,Math.PI*2);ctx.fill()});
  ctx.fillStyle="#6d786e";[0,3,6,9,12,14].forEach(i=>{const xx=pad.l+i*cw/(hours.length-1);ctx.fillText(hours[i].time.slice(11,16),xx-12,h-8)});
 }
+function panelMessage(panelId,message,isError=true){
+ const panel=$(panelId);if(!panel)return;
+ let el=panel.querySelector(".data-load-message");
+ if(!el){el=document.createElement("p");el.className="data-load-message";el.style.cssText="padding:10px 12px;border-radius:9px;margin:8px 0;font-size:13px;background:#fff7e8;color:#79521b;border:1px solid #ead6aa";panel.prepend(el)}
+ el.textContent=message;el.style.background=isError?"#fff1f0":"#eef7f0";el.style.color=isError?"#9b2828":"#245d3e";el.style.borderColor=isError?"#efc4c0":"#c8e3d0";
+}
+function clearPanelMessage(panelId){const panel=$(panelId);panel?.querySelector(".data-load-message")?.remove()}
+function renderDepotSourceRows(rows){
+ const caps={...CAP0},entries=rows.map(d=>({name:d.depot,stock:Number(d.salt_stock_t),cap:caps[d.depot]||"—",trucks:Math.max(0,Math.min(Number(d.trucks_ready)||0,Number(d.drivers_on_call)||0)),note:d.notes||""}));
+ $("d-count").textContent=entries.length;
+ $("d-stock").textContent=r1(entries.reduce((a,x)=>a+(Number.isFinite(x.stock)?x.stock:0),0))+" t";
+ $("d-trucks").textContent=entries.reduce((a,x)=>a+x.trucks,0);
+ $("d-alerts").textContent="—";
+ const cards=$("depot-cards");cards.replaceChildren();
+ entries.forEach(x=>{const card=document.createElement("div");card.className="depot";const top=document.createElement("div");top.className="depot-top";const name=document.createElement("span"),tag=document.createElement("span");name.textContent=x.name;tag.textContent="Source stock";top.append(name,tag);const p=document.createElement("p"),strong=document.createElement("strong");strong.textContent=(Number.isFinite(x.stock)?r1(x.stock):"—")+" t";p.append(strong,document.createTextNode(" · "+x.trucks+" truck(s) with drivers"));card.append(top,p);if(x.note){const n=document.createElement("p");n.className="muted";n.textContent=x.note;card.append(n)}cards.append(card)});
+ table($("dp"),["Depot","Opening stock","Capacity","Trucks with drivers","Note"],entries.map(x=>[x.name,Number.isFinite(x.stock)?r1(x.stock)+" t":"—",x.cap==="—"?"—":x.cap+" t",x.trucks,x.note||"—"]));
+}
 async function runAnalysis(){
- const status=$("run-time");status.textContent="Fetching latest data…";
+ const status=$("run-time"),refresh=$("refresh");status.textContent="Fetching latest data…";if(refresh)refresh.disabled=true;
+ clearPanelMessage("panel-depots");clearPanelMessage("panel-history");lastData=null;hist=null;
+ const [historyResult,depotResult,routeResult,planResult]=await Promise.allSettled([
+  get(SRC.hist),get(SRC.depots),get(SRC.routes),get(SRC.plan)
+ ]);
+ let historyError=null,depots=null,routes=null,plan=null;
+ if(historyResult.status==="fulfilled"){
+  try{const rows=csv(historyResult.value);if(!rows.length)throw new Error("history.csv returned no data rows");hist=summarise(rows);renderHistory(hist);clearPanelMessage("panel-history");}
+  catch(e){historyError=e}
+ }else historyError=historyResult.reason;
+ if(!hist){
+  $("history-state").textContent="History unavailable";
+  panelMessage("panel-history","Could not load historical data: "+(historyError?.message||"Unknown error")+". Check the history.csv URL, CORS access and file contents.");
+ }
+ if(depotResult.status==="fulfilled"){
+  try{depots=csv(depotResult.value);if(!depots.length)throw new Error("tonight.csv returned no data rows");renderDepotSourceRows(depots);}
+  catch(e){panelMessage("panel-depots","Could not read depot data: "+e.message);depots=null}
+ }else panelMessage("panel-depots","Could not load depot data: "+depotResult.reason.message+". Check tonight.csv URL and CORS access.");
+ if(routeResult.status==="fulfilled"){routes=csv(routeResult.value);if(!routes.length)routes=null;}
+ if(planResult.status==="fulfilled")plan=planResult.value;
+ const coreErrors=[];
+ if(!depots)coreErrors.push("Depot source unavailable or invalid");
+ if(!routes)coreErrors.push(routeResult.status==="rejected"?"Routes source failed: "+routeResult.reason.message:"Routes source returned no data");
+ if(plan===null)coreErrors.push("Plan source failed: "+(planResult.status==="rejected"?planResult.reason.message:"empty response"));
+ if(coreErrors.length){
+  status.textContent="Partial refresh · "+(hist?"history loaded":"history unavailable");
+  panelMessage("panel-depots",coreErrors.join(" · ")+". Showing opening depot stock where available; calculated post-plan stock needs routes, plan and forecast.");
+  if(refresh)refresh.disabled=false;return;
+ }
  try{
-   const [dT,rT,plan]=await Promise.all([get(SRC.depots),get(SRC.routes),get(SRC.plan)]);
-   const depots=csv(dT),routes=csv(rT);
-   const fu="https://api.open-meteo.com/v1/forecast?latitude="+routes.map(r=>r.lat).join(",")+"&longitude="+routes.map(r=>r.lon).join(",")+"&hourly=temperature_2m,soil_temperature_0cm,dew_point_2m,precipitation&forecast_hours=48&timezone=Europe%2FDublin";
-   let fc=await get(fu,"json");if(!Array.isArray(fc))fc=[fc];
-   if(!hist){hist=summarise(csv(await get(SRC.hist)));renderHistory(hist)}
-   const data=analyse(routes,depots,plan,fc);
-   lastData={...data,depots,plan,forecast:fc,history:hist};
-   renderTonight(data);renderDepots(data.dep);
-   status.textContent="Updated "+new Date().toLocaleTimeString();
- }catch(e){status.textContent="Refresh failed";console.error(e)}
+  const fu="https://api.open-meteo.com/v1/forecast?latitude="+routes.map(r=>r.lat).join(",")+"&longitude="+routes.map(r=>r.lon).join(",")+"&hourly=temperature_2m,soil_temperature_0cm,dew_point_2m,precipitation&forecast_hours=48&timezone=Europe%2FDublin";
+  let fc=await get(fu,"json");if(!Array.isArray(fc))fc=[fc];
+  if(fc.length!==routes.length)throw new Error("Forecast returned "+fc.length+" points for "+routes.length+" routes.");
+  const data=analyse(routes,depots,plan,fc);
+  lastData={...data,depots,plan,forecast:fc,history:hist};
+  renderTonight(data);renderDepots(data.dep);clearPanelMessage("panel-depots");
+  status.textContent="Updated "+new Date().toLocaleTimeString()+" · "+routes.length+" routes"+(hist?" · history loaded":" · history unavailable");
+ }catch(e){
+  panelMessage("panel-depots","Live route calculation failed: "+e.message+". Opening depot stock is shown above; post-plan stock and route decisions are unavailable.");
+  status.textContent="Partial refresh · forecast/calculation failed";
+  console.error(e);
+ }finally{if(refresh)refresh.disabled=false}
 }
 $("refresh").onclick=runAnalysis;
 $("weather-route").onchange=e=>renderWeather(+e.target.value);
