@@ -903,14 +903,14 @@ function buildAiContext(question){
   stock_alert:d.alert||"",source_note:d.note||""
  }));
  const history=lastData.history;
- const historyRows=Object.keys(history.by).sort().map(routeId=>{
+ const historyRows=history?Object.keys(history.by).sort().map(routeId=>{
   const x=history.by[routeId];
   return {route_id:routeId,priority:x.p,depot:x.d,nights:x.n,runs:x.runs,salt_t:r1(x.salt),
    ice_incidents:x.ice,ice_on_treated_runs:x.it,ice_on_untreated_runs:x.iu,
    no_salt_decisions:x.ns,held_back_decisions:x.hb,ground_at_or_below_zero_nights:x.fr,
    warmest_minimum_air_c:{value:x.aw===-Infinity?null:x.aw,date:x.awd||null},
    warmest_minimum_ground_c:{value:x.w===-99?null:x.w,date:x.wd||null}};
- });
+ }):[];
  const snapshot={
   snapshot_id:lastData.snapshotId,refreshed_at:lastData.refreshedAt,
   current_sources:{
@@ -921,7 +921,7 @@ function buildAiContext(question){
   },
   computed_current_route_decisions:routeRows,
   depot_position_after_computed_plan:depotRows,
-  five_winter_history:{
+  five_winter_history:history?{
    total_route_night_records:history.total,gritted_runs:history.runs,
    salt_used_t:history.salt,ice_incidents:history.ice,
    invalid_air_temperature_rows:history.bad,valid_air_temperature_rows:history.airValid,
@@ -930,7 +930,7 @@ function buildAiContext(question){
     route_id:history.airWarmest.route,date:history.airWarmest.date},
    depot_with_most_no_salt_decisions:{depot:history.depotTop[0],count:history.depotTop[1]},
    by_route:historyRows
-  }
+  }:{unavailable:"The historical source did not load; do not make historical claims."}
  };
  return "LATEST WINTER WATCH DATA SNAPSHOT (JSON)\n"+JSON.stringify(snapshot,null,2)+
   "\n\nUSER TASK / QUESTION\n"+question+
