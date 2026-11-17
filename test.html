@@ -387,7 +387,7 @@ footer{text-align:center;color:var(--muted);font-size:13.5px;padding:28px 10px 1
       </div>
     </div>
     <div class="field full">
-      <p class="muted" id="saved" style="margin:4px 0;">Robin uses an external AI service to answer free-text questions. An API key is a private access code from that provider. The key stays securely in this browser only.</p>
+      <p class="muted" id="saved" style="margin:4px 0;">Robin connects to an AI provider using your own provider API key. This is separate from your ChatGPT login and is not supplied by ChatGPT. The key is stored in this browser's local storage; do not use a personal key on a shared computer or public device.</p>
       <div class="settings-help">
         <strong>Get a free Gemini key:</strong> open <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">Google AI Studio</a>, sign in, click <em>Create API key</em>, copy it, paste it above and press Save.
       </div>
@@ -517,19 +517,20 @@ $("prov").onchange=()=>$("model").value=DEF[$("prov").value];
 
 $("save").onclick=()=>{
   try{
+    let previous={};try{previous=JSON.parse(localStorage.getItem("ww")||"{}")}catch(e){}
+    const typedKey=$("key").value.trim();
     const settingsObj={
       prov:$("prov").value,
       model:$("model").value.trim() || DEF[$("prov").value],
-      key:$("key").value.trim(),
+      key:typedKey || previous.key || "",
       pin:$("pin").value,
       pout:$("pout").value
     };
     localStorage.setItem("ww",JSON.stringify(settingsObj));
-    if(settingsObj.key){
-      $("saved").textContent="Settings & API key successfully saved in this browser!";
-    } else {
-      $("saved").textContent="Settings saved, but API key field was empty.";
-    }
+    const check=JSON.parse(localStorage.getItem("ww")||"{}");
+    $("saved").textContent=check.key
+      ? "✓ Settings saved. A provider API key is stored in this browser."
+      : "Settings saved, but no API key is stored. Add your own provider key to enable Robin.";
   }catch(e){$("saved").textContent="Could not save settings: "+e.message}
 };
 
@@ -693,7 +694,7 @@ async function sendChat(prompt){
   addBubble(q,"user");$("chat-input").value="";
 
   if(!key){
-    addBubble("Robin needs an API key first. Open ⚙️ AI settings below, paste your key and press Save. A free Gemini key can be created at aistudio.google.com/apikey","bot");
+    addBubble("Robin needs your own provider API key. This is not a ChatGPT key. Open AI settings, choose a provider, paste its API key and press Save. Gemini offers a free-tier key, subject to Google limits and terms.","bot");
     $("settings").open=true;$("settings").scrollIntoView({behavior:"smooth"});return;
   }
   if(!lastData){addBubble("Please refresh Tonight first so I can use the current forecast and depot data.","bot");return}
