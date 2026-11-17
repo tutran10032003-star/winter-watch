@@ -956,43 +956,89 @@ async function generateAiSummary(){
  }catch(e){setSummary("AI summary could not be generated: "+e.message,"AI analysis failed · data snapshot remains available to Robin.");}
  finally{button.disabled=false;button.textContent="Generate summary"}
 }
+function panelMessage(panelId,message,isError=true){
+ const panel=$(panelId);if(!panel)return;
+ let el=panel.querySelector(".data-load-message");
+ if(!el){el=document.createElement("p");el.className="data-load-message";el.style.cssText="padding:10px 12px;border-radius:9px;margin:8px 0;font-size:13px;background:#fff7e8;color:#79521b;border:1px solid #ead6aa";panel.prepend(el)}
+ el.textContent=message;el.style.background=isError?"#fff1f0":"#eef7f0";el.style.color=isError?"#9b2828":"#245d3e";el.style.borderColor=isError?"#efc4c0":"#c8e3d0";
+}
+function clearPanelMessage(panelId){const panel=$(panelId);panel?.querySelector(".data-load-message")?.remove()}
+function renderDepotSourceRows(rows){
+ const caps={...CAP0},entries=rows.map(d=>({name:d.depot,stock:Number(d.salt_stock_t),cap:caps[d.depot]||"—",trucks:Math.max(0,Math.min(Number(d.trucks_ready)||0,Number(d.drivers_on_call)||0)),note:d.notes||""}));
+ $("d-count").textContent=entries.length;
+ $("d-stock").textContent=r1(entries.reduce((a,x)=>a+(Number.isFinite(x.stock)?x.stock:0),0))+" t";
+ $("d-trucks").textContent=entries.reduce((a,x)=>a+x.trucks,0);
+ $("d-alerts").textContent="—";
+ const cards=$("depot-cards");cards.replaceChildren();
+ entries.forEach(x=>{const card=document.createElement("div");card.className="depot";const top=document.createElement("div");top.className="depot-top";const name=document.createElement("span"),tag=document.createElement("span");name.textContent=x.name||"Unknown depot";tag.textContent="Source stock";top.append(name,tag);const p=document.createElement("p"),strong=document.createElement("strong");strong.textContent=(Number.isFinite(x.stock)?r1(x.stock):"—")+" t";p.append(strong,document.createTextNode(" · "+x.trucks+" truck(s) with drivers"));card.append(top,p);if(x.note){const n=document.createElement("p");n.className="muted";n.textContent=x.note;card.append(n)}cards.append(card)});
+ table($("dp"),["Depot","Opening stock","Capacity","Trucks with drivers","Note"],entries.map(x=>[x.name||"Unknown depot",Number.isFinite(x.stock)?r1(x.stock)+" t":"—",x.cap==="—"?"—":x.cap+" t",x.trucks,x.note||"—"]));
+}
 async function runAnalysis(){
  $("err-main")?.remove();
  const status=$("run-time"),refreshButton=$("refresh");
  refreshButton.disabled=true;
  lastData=null;hist=null;
- setSummary("Refreshing source files and forecast. The previous snapshot has been invalidated so Robin cannot accidentally use stale data.","Fetching latest source data…");
+ clearPanelMessage("panel-depots");clearPanelMessage("panel-history");
+ setSummary("Refreshing source files and forecast. Depot and historical data will load independently so one unavailable source does not hide the other.","Fetching latest source data…");
  status.textContent="Fetching latest data…";
+ const [historyResult,depotResult,routeResult,planResult]=await Promise.allSettled([
+  get(SRC.hist),get(SRC.depots),get(SRC.routes),get(SRC.plan)
+ ]);
+ let historyError=null,depots=null,routes=null,plan=null,historyRows=[];
+ if(historyResult.status==="fulfilled"){
+  try{
+   historyRows=csv(historyResult.value);
+   if(!historyRows.length||!["route_id","date","ice_incidents"].every(k=>Object.prototype.hasOwnProperty.call(historyRows[0],k)))throw new Error("history.csv is empty or its columns do not match the expected format.");
+   hist=summarise(historyRows);renderHistory(hist);clearPanelMessage("panel-history");
+  }catch(e){historyError=e}
+ }else historyError=historyResult.reason;
+ if(!hist){
+  $("history-state").textContent="History unavailable";
+  panelMessage("panel-history","Could not load historical data: "+(historyError?.message||"Unknown error")+". The Depot panel can still load independently.");
+ }
+ if(depotResult.status==="fulfilled"){
+  try{
+   depots=csv(depotResult.value);
+   if(!depots.length||!["depot","salt_stock_t","trucks_ready","drivers_on_call"].every(k=>Object.prototype.hasOwnProperty.call(depots[0],k)))throw new Error("tonight.csv is empty or its columns do not match the expected format.");
+   renderDepotSourceRows(depots);clearPanelMessage("panel-depots");
+  }catch(e){panelMessage("panel-depots","Could not read depot data: "+e.message);depots=null}
+ }else panelMessage("panel-depots","Could not load depot data: "+depotResult.reason.message+". Historical data can still load independently.");
+ if(routeResult.status==="fulfilled"){
+  routes=csv(routeResult.value);
+  if(!routes.length||!["route_id","lat","lon","depot","length_km"].every(k=>Object.prototype.hasOwnProperty.call(routes[0],k)))routes=null;
+ }
+ if(planResult.status==="fulfilled")plan=planResult.value;
+ const coreErrors=[];
+ if(!depots)coreErrors.push("Depot source unavailable or invalid");
+ if(!routes)coreErrors.push(routeResult.status==="rejected"?"Routes source failed: "+routeResult.reason.message:"Routes source returned no valid data");
+ if(plan===null||!String(plan).trim())coreErrors.push("Plan source failed: "+(planResult.status==="rejected"?planResult.reason.message:"empty response"));
+ if(coreErrors.length){
+  status.textContent="Partial refresh · "+(hist?"history loaded":"history unavailable");
+  if(depots)panelMessage("panel-depots",coreErrors.join(" · ")+". Showing opening depot stock; post-plan stock needs valid routes, plan and forecast.",false);
+  setSummary("Some source data loaded, but there is no complete current forecast snapshot. Depot and History show any valid source data independently. Fix the source issue shown on the page, then refresh before using Robin.","Partial refresh · no complete snapshot available.");
+  refreshButton.disabled=false;return;
+ }
  try{
-  const [dT,rT,plan,hT]=await Promise.all([get(SRC.depots),get(SRC.routes),get(SRC.plan),get(SRC.hist)]);
-  const depots=csv(dT),routes=csv(rT),historyRows=csv(hT);
-  if(!depots.length)throw new Error("Depot source returned no rows.");
-  if(!routes.length)throw new Error("Route source returned no rows.");
-  if(!historyRows.length)throw new Error("Historical source returned no rows.");
   const fu="https://api.open-meteo.com/v1/forecast?latitude="+routes.map(r=>r.lat).join(",")+"&longitude="+routes.map(r=>r.lon).join(",")+"&hourly=temperature_2m,soil_temperature_0cm,dew_point_2m,precipitation&forecast_hours=48&timezone=Europe%2FDublin";
   let fc=await get(fu,"json");if(!Array.isArray(fc))fc=[fc];
   if(fc.length!==routes.length)throw new Error("Forecast returned "+fc.length+" points for "+routes.length+" routes.");
-  const freshHistory=summarise(historyRows);
   const data=analyse(routes,depots,plan,fc);
-  hist=freshHistory;renderHistory(hist);
   const refreshedAt=new Date().toISOString();
   const snapshotId=refreshedAt.replace(/[-:.TZ]/g,"").slice(0,14);
   lastData={...data,depots,plan,forecast:fc,history:hist,sourceRows:{depots,routes},refreshedAt,snapshotId};
-  renderTonight(data);renderDepots(data.dep);
+  renderTonight(data);renderDepots(data.dep);clearPanelMessage("panel-depots");
   $("weather-route").innerHTML="";
   routes.forEach((r,i)=>{const o=document.createElement("option");o.value=String(i);o.textContent=r.route_id+" · "+r.route;$("weather-route").appendChild(o)});
   renderWeather(0);
   status.textContent="Updated "+new Date(refreshedAt).toLocaleTimeString()+" · "+routes.length+" routes · "+historyRows.length.toLocaleString()+" historical rows";
   $("ai-summary-refresh").disabled=false;
-  if((sessionApiKey||$("key").value.trim()).trim()){
-   await generateAiSummary();
-  }else{
-   setSummary("All source files and the latest forecast have been refreshed. The complete snapshot is ready. Enter a provider key in AI settings and choose Generate summary to let Robin analyse it. Robin will use this same snapshot when answering questions.","Data updated · AI summary waiting for provider key · snapshot "+snapshotId);
-  }
+  if((sessionApiKey||$("key").value.trim()).trim())await generateAiSummary();
+  else setSummary("All source files and the latest forecast have been refreshed. The complete snapshot is ready. Enter a provider key in AI settings and choose Generate summary to let Robin analyse it. Robin will use this same snapshot when answering questions.","Data updated · AI summary waiting for provider key · snapshot "+snapshotId);
  }catch(e){
-  lastData=null;hist=null;
-  setSummary("Refresh failed. Robin has been blocked from using an old snapshot. Fix the source or connection issue, then refresh again.\n\n"+e.message,"Refresh failed · no current snapshot available.");
-  status.textContent="Refresh failed";
+  lastData=null;
+  panelMessage("panel-depots","Live route calculation failed: "+e.message+". Opening depot stock is shown above; post-plan stock and route decisions are unavailable.");
+  status.textContent="Partial refresh · forecast/calculation failed";
+  setSummary("Depot and Historical source data loaded, but the live route calculation failed. See the Depot panel message for the exact error. Robin is blocked until a complete snapshot is available.","Forecast/calculation failed · no current snapshot.");
   showError(e.message);
  }finally{refreshButton.disabled=false}
 }
