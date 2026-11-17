@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#102b3f">
+<meta name="theme-color" content="#18352f">
 <title>Winter Watch | County Cavan</title>
 <style>
 :root{color-scheme:light;--navy:#102b3f;--navy2:#183d52;--pine:#174c3c;--pine2:#23664f;--red:#b8323a;--gold:#d6b56d;--ice:#e8f3f7;--snow:#fff;--bg:#f2f7f9;--ink:#183342;--muted:#607785;--line:#d5e2e8;--green:#187448;--amber:#9b6500;--danger:#b42318;--shadow:0 8px 24px #102b3f12}
@@ -28,10 +28,50 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:24px 10px 5px
 @media(max-width:760px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.two{grid-template-columns:1fr}.settings-grid{grid-template-columns:1fr 1fr}.brand{align-items:flex-start}.top{padding:18px 16px}.shell{padding:14px 13px 70px}.heading{align-items:flex-start;flex-direction:column}.depot-list{grid-template-columns:1fr}}
 @media(max-width:420px){.settings-grid{grid-template-columns:1fr}.brand p{max-width:230px}.top-right .live{display:none}.metric .value{font-size:24px}}
 @media(prefers-reduced-motion:no-preference){.snowmark{animation:drift 5s ease-in-out infinite alternate}@keyframes drift{to{transform:translateY(4px) rotate(8deg)}}}
+
+/* Cozy Winter Operations visual refresh */
+:root{color-scheme:light;--navy:#18352f;--navy2:#25483e;--pine:#315b46;--pine2:#416d55;--red:#a9433e;--gold:#c99b51;--ice:#e9eee7;--snow:#fffdf8;--bg:#f2f0e8;--ink:#263a32;--muted:#6d786e;--line:#dedfd4;--green:#26704b;--amber:#94651c;--danger:#a9433e;--shadow:0 7px 22px #263a3210}
+body{background:var(--bg);color:var(--ink)}
+.top{background:linear-gradient(115deg,#172f2c 0%,#25483e 58%,#304d42 100%);padding-top:24px;padding-bottom:26px}
+.top:after{content:"✦   ·   ❄   ·   ✦   ·   ❄";color:#f6e8c31f;letter-spacing:13px;top:18px}
+.brand{align-items:flex-start;flex-wrap:wrap}
+.brand-mark{gap:13px}
+.brand h1{font-family:Georgia,"Times New Roman",serif;font-weight:600;letter-spacing:-.6px}
+.brand p{color:#d9e0d5}
+.robin-mark{width:48px;height:48px;display:grid;place-items:center;background:#f8f2e7;border-radius:50%;box-shadow:0 4px 15px #071c1833}
+.robin-mark svg{width:42px;height:42px}
+.welcome-line{flex-basis:100%;display:flex;flex-direction:column;gap:5px;margin-top:17px;padding:14px 17px;border:1px solid #ffffff24;border-radius:13px;background:linear-gradient(90deg,#ffffff12,#ffffff08);max-width:760px}
+.welcome-kicker{font-size:10px;letter-spacing:.16em;font-weight:800;color:#e5c98d}
+.welcome-line strong{font:600 clamp(20px,3vw,27px)/1.2 Georgia,"Times New Roman",serif;color:#fffaf0}
+.welcome-line>span:last-child{font-size:12px;color:#d9e0d5}
+.shell{padding-top:17px}
+.notice{background:#fbf4e5;border-color:#e9d8b4;color:#6b552d;border-radius:11px}
+.nav{gap:7px}
+.tab{border-color:#dedfd4;background:#fbfaf5;color:#637067;border-radius:9px}
+.tab[aria-selected=true]{background:var(--pine);border-color:var(--pine);box-shadow:0 3px 10px #203c3020}
+.heading h2,.card h3,.settings summary{font-family:Georgia,"Times New Roman",serif;font-weight:600}
+.metric,.card{background:#fffdf8;border-color:#e2e0d6;box-shadow:0 5px 17px #263a320b;border-radius:12px}
+.metric .value{color:var(--navy)}
+.card{padding:17px}
+th{background:#edf0e8;color:#405b49}
+th,td{border-bottom-color:#ecebe3}
+td{color:#35483e}
+.depot{border-color:#e3e1d7;background:#fffefa}
+.chat-launch{background:var(--red);box-shadow:0 8px 22px #43251f33}
+.chathead{background:var(--navy)}
+.chatbody{background:#f7f5ee}
+.bubble.bot{background:#fffdf8;border-color:#e6e1d5}
+.bubble.user{background:#e8eee5}
+.chat-compose button{background:var(--pine)}
+.btn{background:var(--pine)}
+.btn:hover{background:var(--pine2)}
+@media(max-width:760px){.welcome-line{margin-top:12px}.robin-mark{width:42px;height:42px}.robin-mark svg{width:37px;height:37px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;scroll-behavior:auto!important}}
+
 </style>
 </head>
 <body>
-<header class="top"><div class="brand"><div class="brand-mark"><span class="snowmark" aria-hidden="true">☃️</span><div><h1>Winter Watch</h1><p>County Cavan · Winter road service decision support</p></div></div><div class="top-right"><span class="live">● OPERATIONS TOOL</span></div></div></header>
+<header class="top"><div class="brand"><div class="brand-mark"><span class="robin-mark" aria-hidden="true"><svg viewBox="0 0 80 80" role="img" aria-label="Robin bird"><path d="M16 49c2-18 18-31 37-27 10 2 17 10 17 20 0 12-10 21-24 22H30c-9 0-15-6-14-15Z" fill="#9B674B"/><path d="M39 40c7-8 20-8 27-1 5 5 4 13-2 18-7 7-19 6-26-1-5-5-5-11 1-16Z" fill="#B9473D"/><path d="m66 35 12 4-12 5Z" fill="#D7A34D"/><circle cx="57" cy="31" r="2.8" fill="#1B2925"/><path d="M27 62 23 72m17-9-1 9" stroke="#D7A34D" stroke-width="3" stroke-linecap="round"/><path d="M17 48 5 43l5 13Z" fill="#76513F"/></svg></span><div><h1>Winter Watch</h1><p>County Cavan · Winter road service decision support</p></div></div><div class="top-right"><span class="live">● OPERATIONS TOOL</span></div><div class="welcome-line"><span class="welcome-kicker">A WINTER NIGHT IN CAVAN</span><strong>Good evening. Let's get tonight's roads ready.</strong><span>Clear decisions for the people keeping our roads safe.</span></div></div></header>
 <main class="shell">
 <div class="notice"><strong>Duty Engineer notice</strong><span>This tool recommends only. The Duty Engineer makes the final decision and signs the night log. Forecast and roster estimates must be checked before dispatch.</span></div>
 <nav class="nav" aria-label="Main navigation">
@@ -87,9 +127,9 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:24px 10px 5px
 <footer>Winter Watch · Fictional County Cavan decision-support prototype · Open-Meteo forecast data</footer>
 </main>
 
-<button class="chat-launch" id="chat-launch" aria-expanded="false">☃ Ask Bé Muối</button>
+<button class="chat-launch" id="chat-launch" aria-expanded="false">🐦 Ask Robin</button>
 <aside class="chatbox" id="chatbox" aria-label="Winter Watch AI assistant">
-<div class="chathead"><div><strong>☃ Bé Muối · Winter Assistant</strong><div style="font-size:11px;color:#c9dce4">Explains the rules; does not make decisions</div></div><button id="chat-close" aria-label="Close chat">×</button></div>
+<div class="chathead"><div><strong>🐦 Robin · Winter Assistant</strong><div style="font-size:11px;color:#c9dce4">Explains the rules; does not make decisions</div></div><button id="chat-close" aria-label="Close chat">×</button></div>
 <div class="chatbody" id="chatbody"><div class="bubble bot">Hi! I can explain tonight's route recommendations, depot constraints and historical patterns. The Duty Engineer always makes the final decision.</div><div class="starter"><button data-prompt="Summarise tonight's recommended route decisions.">Tonight's summary</button><button data-prompt="Which routes need engineer attention and why?">Routes to review</button><button data-prompt="What does the history suggest about R10 and R05?">History insights</button></div></div>
 <div class="chat-compose"><textarea id="chat-input" placeholder="Ask about tonight's plan…" rows="1"></textarea><button id="chat-send">Send</button></div>
 </aside>
