@@ -514,7 +514,59 @@ footer{font-size:13px}
  #dispatch .dispatch-hero{padding:17px!important}
  #dispatch .dispatch-hero h4{font-size:21px!important}
 }
-</style>
+
+/* AI briefing + small-screen layout */
+.ai-summary-card{border-left:4px solid #c49a55!important;background:linear-gradient(145deg,#fff,#f8faf7)!important}
+.ai-summary-head{align-items:flex-start;flex-wrap:wrap}
+.ai-summary-head>div{min-width:0;flex:1}
+.ai-summary-text{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.7;font-size:14.5px;color:var(--ink);padding:12px 14px;border-radius:11px;background:#f5f7f2;border:1px solid #e1e7dc;min-height:54px}
+#ai-summary-status{margin:4px 0 0}
+#ai-summary-refresh:disabled,#refresh:disabled{opacity:.6;cursor:wait}
+@media(max-width:760px){
+ .heading{align-items:stretch;flex-direction:column}
+ .heading .actions{width:100%}
+ #refresh{width:100%;min-height:46px}
+ .route-filters{align-items:stretch}
+ .route-filters label{width:100%;min-width:0}
+ .route-filters label input,.route-filters label select{width:100%;min-height:44px}
+ .route-filters #filter-count{margin:0}
+ .ai-summary-head{flex-direction:column}
+ .ai-summary-head #ai-summary-refresh{width:100%;min-height:44px}
+ .dispatch-stats{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ .history-grid{grid-template-columns:1fr!important}
+ .settings-grid{grid-template-columns:1fr!important}
+ .settings-grid .field.span-2,.settings-grid .field.full{grid-column:span 1!important}
+ .chatbox.open{top:8px!important;bottom:8px!important;left:8px!important;right:8px!important;width:auto!important;height:auto!important;max-height:none!important;border-radius:16px!important}
+ .chatbody{min-height:0;overscroll-behavior:contain}
+ .chat-compose{padding:9px;gap:7px}
+ .chat-compose textarea{min-width:0;min-height:44px;font-size:16px}
+ .chat-compose button{min-width:66px;min-height:44px}
+ .chat-launch{max-width:calc(100vw - 28px)}
+ .nav{scrollbar-width:thin;overscroll-behavior-x:contain}
+ .wrap{max-width:100%;overscroll-behavior-x:contain}
+}
+@media(max-width:420px){
+ .shell{padding-left:10px!important;padding-right:10px!important}
+ .top{padding-left:12px!important;padding-right:12px!important}
+ .brand-mark{gap:9px}
+ .robin-mark{width:48px!important;height:48px!important;min-width:48px!important}
+ .robin-svg{width:46px!important;height:46px!important}
+ .brand h1{font-size:23px!important}
+ .brand p{font-size:12px!important;max-width:190px}
+ .top-right{gap:4px}
+ .grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important}
+ .metric{padding:11px!important}
+ .metric .label{font-size:10px!important;line-height:1.35}
+ .metric .value{font-size:21px!important}
+ .metric .hint{font-size:11px!important}
+ .card{padding:13px!important}
+ .dispatch-stats{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ .notice{padding:12px!important}
+ .tab{padding:9px 12px!important}
+ .chat-launch{right:10px!important;bottom:10px!important}
+}
+@media(prefers-reduced-motion:reduce){.ai-summary-card *{scroll-behavior:auto}}
+\n</style>
 </head>
 <body>
 <header class="top"><div class="brand"><div class="brand-mark"><span class="robin-mark" aria-hidden="true"><svg class="robin-svg" viewBox="0 0 100 100"><ellipse cx="48" cy="55" rx="35" ry="34" fill="#986044"/><ellipse cx="56" cy="62" rx="25" ry="25" fill="#f7e9d4"/><ellipse cx="47" cy="43" rx="31" ry="29" fill="#a96d4c"/><ellipse cx="57" cy="54" rx="25" ry="27" fill="#e65a37"/><ellipse cx="55" cy="69" rx="23" ry="18" fill="#f5dfc3"/><path d="M76 38 94 45 76 51Z" fill="#e7ad42"/><ellipse cx="66" cy="36" rx="5" ry="7" fill="#24352e"/><circle cx="67.5" cy="33.5" r="2" fill="#fff"/><path d="M30 82q-7 9-14 7m28-3q-3 9-10 9" fill="none" stroke="#8c593e" stroke-width="4" stroke-linecap="round"/><path d="M17 52q-10-8-12-2 5 10 15 8" fill="#80513c"/><path d="M35 24q8-10 18-8" fill="none" stroke="#d9a27a" stroke-width="4" stroke-linecap="round"/></svg></span><div><h1>Winter Watch</h1><p>County Cavan · Winter road service decision support</p></div></div><div class="top-right"><span class="live">● OPERATIONS TOOL</span></div><div class="welcome-line"><span class="welcome-kicker">A WINTER NIGHT IN CAVAN</span><strong>Good evening. Let's get tonight's roads ready.</strong><span>Clear decisions for the people keeping our roads safe.</span></div></div></header>
@@ -532,7 +584,13 @@ footer{font-size:13px}
 <div class="metric"><div class="label">CHECK / HOLD / FLAG</div><div class="value" id="m-alert">—</div><div class="hint">Review before dispatch</div></div>
 <div class="metric"><div class="label">DEPOT RESTOCK ALERTS</div><div class="value" id="m-restock">—</div><div class="hint">Below 30% of capacity</div></div>
 </div>
-<div class="card"><div class="card-head"><h3>Route-by-route decision</h3><span class="muted" id="run-time">Not yet refreshed</span></div><div class="route-filters"><label>Find route<input id="route-search" type="search" placeholder="Search route or road name"></label><label>Decision<select id="route-status"><option value="ALL">All decisions</option><option value="TREAT">TREAT</option><option value="NO">NO</option><option value="CHECK">CHECK</option><option value="HOLD">HOLD</option><option value="FLAG">FLAG</option></select></label><label>Depot<select id="route-depot"><option value="ALL">All depots</option></select></label><button class="btn secondary" id="clear-filters" type="button">Clear filters</button><span id="filter-count" class="muted">10 routes</span></div><div class="wrap"><table id="rt"><thead><tr><th>Route</th><th>Priority</th><th>Depot</th><th>Min ground °C</th><th>Wet?</th><th>Decision</th><th>Reason / departure</th></tr></thead><tbody><tr><td colspan="7" class="empty">Press Refresh analysis to load the live data.</td></tr></tbody></table></div><p class="muted" id="fcnote">Forecast source: Open-Meteo. The forecast must cover all 15 night hours (18:00–08:00).</p></div>
+<div class="card ai-summary-card" id="ai-summary-card" aria-live="polite">
+  <div class="card-head ai-summary-head">
+    <div><h3>Robin's AI operations briefing</h3><p class="muted" id="ai-summary-status">Waiting for a successful data refresh.</p></div>
+    <button class="btn secondary" id="ai-summary-refresh" type="button">Generate summary</button>
+  </div>
+  <div id="ai-summary" class="ai-summary-text">Refresh the data to prepare the latest snapshot. If an AI provider key is configured, Robin will automatically analyse it and create a briefing.</div>
+</div>\n<div class="card"><div class="card-head"><h3>Route-by-route decision</h3><span class="muted" id="run-time">Not yet refreshed</span></div><div class="route-filters"><label>Find route<input id="route-search" type="search" placeholder="Search route or road name"></label><label>Decision<select id="route-status"><option value="ALL">All decisions</option><option value="TREAT">TREAT</option><option value="NO">NO</option><option value="CHECK">CHECK</option><option value="HOLD">HOLD</option><option value="FLAG">FLAG</option></select></label><label>Depot<select id="route-depot"><option value="ALL">All depots</option></select></label><button class="btn secondary" id="clear-filters" type="button">Clear filters</button><span id="filter-count" class="muted">10 routes</span></div><div class="wrap"><table id="rt"><thead><tr><th>Route</th><th>Priority</th><th>Depot</th><th>Min ground °C</th><th>Wet?</th><th>Decision</th><th>Reason / departure</th></tr></thead><tbody><tr><td colspan="7" class="empty">Press Refresh analysis to load the live data.</td></tr></tbody></table></div><p class="muted" id="fcnote">Forecast source: Open-Meteo. The forecast must cover all 15 night hours (18:00–08:00).</p></div>
 <div class="two"><div class="card"><h3>Dispatch overview</h3><div id="dispatch" class="empty">Route schedule will appear after analysis.</div></div><div class="card"><h3>Decision key</h3><p><span class="chip TREAT">✓ TREAT</span> Eligible under the rules; engineer approval required.</p><p><span class="chip NO">— NO</span> No treatment indicated by the rules.</p><p><span class="chip CHECK">! CHECK</span> Ambiguous or incomplete information.</p><p><span class="chip HOLD">Ⅱ HOLD</span> Held due to stock/priority restriction.</p><p><span class="chip FLAG">⚑ FLAG</span> Operational constraint or escalation.</p></div></div>
 </section>
 
@@ -609,7 +667,7 @@ const LIMIT={1:1.0,2:0.5,3:-1.0},CAP0={Cavan:900,Ballyjamesduff:420,Bailieboroug
 const $=id=>document.getElementById(id),DEF={openai:"gpt-4o-mini",anthropic:"claude-haiku-5-5",gemini:"gemini-2.5-flash",groq:"openai/gpt-oss-120b"};
 let hist=null,lastData=null,lastUserText="";
 function csv(t){const rows=[];let r=[],c="",q=false;for(let i=0;i<t.length;i++){const ch=t[i];if(q){if(ch==='"'){if(t[i+1]==='"'){c+='"';i++}else q=false}else c+=ch}else if(ch==='"')q=true;else if(ch===","){r.push(c);c=""}else if(ch==="\n"||ch==="\r"){if(ch==="\r"&&t[i+1]==="\n")i++;r.push(c);rows.push(r);r=[];c=""}else c+=ch}if(c||r.length){r.push(c);rows.push(r)}const h=(rows.shift()||[]).map(x=>x.trim());return rows.filter(x=>x.length>1).map(x=>Object.fromEntries(h.map((k,i)=>[k,(x[i]||"").trim()])))}
-async function get(url,type){const r=await fetch(url,{cache:"no-store"});if(!r.ok)throw new Error(url+" returned "+r.status);return type==="json"?r.json():r.text()}
+async function get(url,type){const freshUrl=url+(url.includes("?")?"&":"?")+"_ww_refresh="+Date.now();const r=await fetch(freshUrl,{cache:"no-store",headers:{"Cache-Control":"no-cache"}});if(!r.ok)throw new Error(url+" returned "+r.status);return type==="json"?r.json():r.text()}
 const mins=s=>Date.UTC(+s.slice(0,4),+s.slice(5,7)-1,+s.slice(8,10),+s.slice(11,13),+s.slice(14,16))/60000;
 const iso=m=>new Date(m*60000).toISOString().slice(0,16),hhmm=m=>new Date(m*60000).toISOString().slice(11,16),r1=x=>Math.round(x*100)/100;
 const prevDay=d=>new Date(Date.parse(d+"T00:00:00Z")-864e5).toISOString().slice(0,10),nextDay=d=>new Date(Date.parse(d+"T00:00:00Z")+864e5).toISOString().slice(0,10);
@@ -828,16 +886,144 @@ function renderHistory(h){
 }
 function renderWeather(i){if(!lastData)return;const x=lastData.res[i];if(!x||!x.hours.length){$("weather-detail").textContent=x?x.why:"No forecast data.";drawChart([]);return}const hours=x.hours;const detail=$("weather-detail");detail.replaceChildren();detail.classList.remove("empty");const lines=[["Route:",x.r.route_id+" · "+x.r.route+" — priority P"+x.p+" threshold "+x.lim+"°C."],["Minimum ground temperature:",x.min+"°C at "+x.minT+"."],["Dew point minus ground at minimum:",x.gap+"°C. Wet condition: "+(x.wet?"detected":"not detected")+"."],["First 0°C crossing:",(x.zero?x.zero.slice(11,16):"No crossing forecast")+"."],["Rule result:",x.status]];lines.forEach(([label,value])=>{const p=document.createElement("p"),strong=document.createElement("strong");strong.textContent=label+" ";p.append(strong,document.createTextNode(value));detail.appendChild(p)});drawChart(hours)}
 function drawChart(hours){const c=$("weather-chart"),ctx=c.getContext("2d"),w=c.clientWidth||600,h=c.clientHeight||230,dpr=window.devicePixelRatio||1;c.width=w*dpr;c.height=h*dpr;ctx.scale(dpr,dpr);ctx.clearRect(0,0,w,h);if(!hours.length){ctx.fillStyle="#607785";ctx.font="13px system-ui";ctx.fillText("Forecast chart will appear after refresh.",12,30);return}const pad={l:38,r:16,t:16,b:30},cw=w-pad.l-pad.r,ch=h-pad.t-pad.b,vals=hours.map(x=>x.ground),lo=Math.min(-2,Math.floor(Math.min(...vals)-1)),hi=Math.max(3,Math.ceil(Math.max(...vals)+1));const y=v=>pad.t+(hi-v)/(hi-lo)*ch;ctx.strokeStyle="#e1eaee";ctx.fillStyle="#607785";ctx.font="10px system-ui";for(let v=lo;v<=hi;v++){ctx.beginPath();ctx.moveTo(pad.l,y(v));ctx.lineTo(w-pad.r,y(v));ctx.stroke();ctx.fillText(v+"°",4,y(v)+3)}ctx.strokeStyle="#b8323a";ctx.setLineDash([4,4]);ctx.beginPath();ctx.moveTo(pad.l,y(0));ctx.lineTo(w-pad.r,y(0));ctx.stroke();ctx.setLineDash([]);ctx.strokeStyle="#174c3c";ctx.lineWidth=2;ctx.beginPath();hours.forEach((a,i)=>{const xx=pad.l+i*cw/(hours.length-1);if(i===0)ctx.moveTo(xx,y(a.ground));else ctx.lineTo(xx,y(a.ground))});ctx.stroke();ctx.fillStyle="#174c3c";hours.forEach((a,i)=>{const xx=pad.l+i*cw/(hours.length-1);ctx.beginPath();ctx.arc(xx,y(a.ground),2.8,0,Math.PI*2);ctx.fill()});ctx.fillStyle="#607785";[0,3,6,9,12,14].forEach(i=>{const xx=pad.l+i*cw/(hours.length-1);ctx.fillText(hours[i].time.slice(11,16),xx-12,h-8)})}
-async function runAnalysis(){ $("err")?.remove();const status=$("run-time");status.textContent="Fetching latest data…";try{const [dT,rT,plan]=await Promise.all([get(SRC.depots),get(SRC.routes),get(SRC.plan)]);const depots=csv(dT),routes=csv(rT);const fu="https://api.open-meteo.com/v1/forecast?latitude="+routes.map(r=>r.lat).join(",")+"&longitude="+routes.map(r=>r.lon).join(",")+"&hourly=temperature_2m,soil_temperature_0cm,dew_point_2m,precipitation&forecast_hours=48&timezone=Europe%2FDublin";let fc=await get(fu,"json");if(!Array.isArray(fc))fc=[fc];if(fc.length!==routes.length)throw new Error("Forecast returned "+fc.length+" points for "+routes.length+" routes.");if(!hist){hist=summarise(csv(await get(SRC.hist)));renderHistory(hist)}const data=analyse(routes,depots,plan,fc);lastData={...data,depots,plan,forecast:fc,history:hist};renderTonight(data);renderDepots(data.dep);status.textContent="Updated "+new Date().toLocaleTimeString();}catch(e){status.textContent="Refresh failed";showError(e.message)}}
+function buildAiContext(question){
+ if(!lastData)throw new Error("No successful data snapshot is available. Refresh first.");
+ const routeRows=lastData.res.map(x=>({
+  route_id:x.r.route_id,route:x.r.route,priority:x.p,depot:x.depot,
+  road_length_km:x.km,salt_required_t:x.need,decision:x.status,decision_reason:x.why,
+  threshold_c:x.lim,minimum_ground_c:x.min,minimum_ground_time:x.minT,
+  dew_minus_ground_c:x.gap,wet_condition_detected:x.wet,
+  first_zero_crossing:x.zero,first_priority_threshold_crossing:x.first,
+  recommended_departure:x.depart||null,recommended_finish:x.finish||null,
+  forecast_night_hours:x.hours.map(h=>({time:h.time,ground_temperature_c:h.ground,dew_point_c:h.dew,precipitation_mm:h.rain}))
+ }));
+ const depotRows=Object.entries(lastData.dep).map(([name,d])=>({
+  depot:name,opening_stock_t:d.openingStock,remaining_stock_after_plan_t:d.stock,
+  capacity_t:d.cap,trucks_with_drivers_available:d.free.length,
+  stock_alert:d.alert||"",source_note:d.note||""
+ }));
+ const history=lastData.history;
+ const historyRows=Object.keys(history.by).sort().map(routeId=>{
+  const x=history.by[routeId];
+  return {route_id:routeId,priority:x.p,depot:x.d,nights:x.n,runs:x.runs,salt_t:r1(x.salt),
+   ice_incidents:x.ice,ice_on_treated_runs:x.it,ice_on_untreated_runs:x.iu,
+   no_salt_decisions:x.ns,held_back_decisions:x.hb,ground_at_or_below_zero_nights:x.fr,
+   warmest_minimum_air_c:{value:x.aw===-Infinity?null:x.aw,date:x.awd||null},
+   warmest_minimum_ground_c:{value:x.w===-99?null:x.w,date:x.wd||null}};
+ });
+ const snapshot={
+  snapshot_id:lastData.snapshotId,refreshed_at:lastData.refreshedAt,
+  current_sources:{
+   depot_csv_rows:lastData.sourceRows.depots,
+   route_csv_rows:lastData.sourceRows.routes,
+   winter_service_plan:lastData.plan,
+   open_meteo_forecast_hours_by_route:routeRows
+  },
+  computed_current_route_decisions:routeRows,
+  depot_position_after_computed_plan:depotRows,
+  five_winter_history:{
+   total_route_night_records:history.total,gritted_runs:history.runs,
+   salt_used_t:history.salt,ice_incidents:history.ice,
+   invalid_air_temperature_rows:history.bad,valid_air_temperature_rows:history.airValid,
+   average_minimum_air_temperature_c:history.airAvg,
+   warmest_minimum_air:{value_c:history.airWarmest.value===-Infinity?null:history.airWarmest.value,
+    route_id:history.airWarmest.route,date:history.airWarmest.date},
+   depot_with_most_no_salt_decisions:{depot:history.depotTop[0],count:history.depotTop[1]},
+   by_route:historyRows
+  }
+ };
+ return "LATEST WINTER WATCH DATA SNAPSHOT (JSON)\\n"+JSON.stringify(snapshot,null,2)+
+  "\\n\\nUSER TASK / QUESTION\\n"+question+
+  "\\n\\nAnalyse only this snapshot. State clearly which findings come from current forecast, current depot/source data, calculated decisions, or historical records. Do not treat historical incidents as proof of causation. Do not invent missing values.";
+}
+function setSummary(text,status){
+ $("ai-summary").textContent=text;
+ $("ai-summary-status").textContent=status;
+}
+async function generateAiSummary(){
+ if(!lastData){setSummary("Refresh the data successfully before asking Robin to analyse it.","No current data snapshot.");return}
+ const key=(sessionApiKey||$("key").value.trim()).trim();
+ if(!key){setSummary("The latest data has been refreshed and is ready. Enter your own provider API key in AI settings, then select Generate summary. Robin will use this exact snapshot.","Data updated · AI summary waiting for provider key.");$("settings").open=true;return}
+ const prov=$("prov").value||"gemini",model=$("model").value.trim()||DEF[prov];
+ const button=$("ai-summary-refresh");button.disabled=true;button.textContent="Analysing…";
+ const snapshotAtStart=lastData.snapshotId;
+ setSummary("Robin is analysing the latest forecast, all route decisions, depot constraints, service-plan rules and refreshed historical metrics…","AI analysis in progress · snapshot "+snapshotAtStart);
+ try{
+  const prompt=buildAiContext("Create a concise but useful operations briefing for the Duty Engineer. 1) Give the overall tonight decision and counts for TREAT, NO, CHECK, HOLD and FLAG. 2) Identify every route needing CHECK, HOLD or FLAG and explain the exact reason. 3) Explain relevant depot stock and truck-with-driver constraints. 4) Highlight the most important current forecast conditions. 5) Add up to two useful historical comparisons, clearly labelled historical and not tonight's forecast. 6) End with the specific items the Duty Engineer should verify before approving dispatch. Do not claim that any route has actually been treated.");
+  const result=await ask(prov,model,key,SYSTEM,prompt);
+  if(!lastData||lastData.snapshotId!==snapshotAtStart)throw new Error("The data snapshot changed while the AI was responding. Refresh or generate the summary again.");
+  setSummary(result.text,"AI briefing generated · "+new Date().toLocaleTimeString()+" · "+prov+" / "+model+" · snapshot "+snapshotAtStart);
+ }catch(e){setSummary("AI summary could not be generated: "+e.message,"AI analysis failed · data snapshot remains available to Robin.");}
+ finally{button.disabled=false;button.textContent="Generate summary"}
+}
+async function runAnalysis(){
+ $("err-main")?.remove();
+ const status=$("run-time"),refreshButton=$("refresh");
+ refreshButton.disabled=true;
+ lastData=null;hist=null;
+ setSummary("Refreshing source files and forecast. The previous snapshot has been invalidated so Robin cannot accidentally use stale data.","Fetching latest source data…");
+ status.textContent="Fetching latest data…";
+ try{
+  const [dT,rT,plan,hT]=await Promise.all([get(SRC.depots),get(SRC.routes),get(SRC.plan),get(SRC.hist)]);
+  const depots=csv(dT),routes=csv(rT),historyRows=csv(hT);
+  if(!depots.length)throw new Error("Depot source returned no rows.");
+  if(!routes.length)throw new Error("Route source returned no rows.");
+  if(!historyRows.length)throw new Error("Historical source returned no rows.");
+  const fu="https://api.open-meteo.com/v1/forecast?latitude="+routes.map(r=>r.lat).join(",")+"&longitude="+routes.map(r=>r.lon).join(",")+"&hourly=temperature_2m,soil_temperature_0cm,dew_point_2m,precipitation&forecast_hours=48&timezone=Europe%2FDublin";
+  let fc=await get(fu,"json");if(!Array.isArray(fc))fc=[fc];
+  if(fc.length!==routes.length)throw new Error("Forecast returned "+fc.length+" points for "+routes.length+" routes.");
+  const freshHistory=summarise(historyRows);
+  const data=analyse(routes,depots,plan,fc);
+  hist=freshHistory;renderHistory(hist);
+  const refreshedAt=new Date().toISOString();
+  const snapshotId=refreshedAt.replace(/[-:.TZ]/g,"").slice(0,14);
+  lastData={...data,depots,plan,forecast:fc,history:hist,sourceRows:{depots,routes},refreshedAt,snapshotId};
+  renderTonight(data);renderDepots(data.dep);
+  $("weather-route").innerHTML="";
+  routes.forEach((r,i)=>{const o=document.createElement("option");o.value=String(i);o.textContent=r.route_id+" · "+r.route;$("weather-route").appendChild(o)});
+  renderWeather(0);
+  status.textContent="Updated "+new Date(refreshedAt).toLocaleTimeString()+" · "+routes.length+" routes · "+historyRows.length.toLocaleString()+" historical rows";
+  $("ai-summary-refresh").disabled=false;
+  if((sessionApiKey||$("key").value.trim()).trim()){
+   await generateAiSummary();
+  }else{
+   setSummary("All source files and the latest forecast have been refreshed. The complete snapshot is ready. Enter a provider key in AI settings and choose Generate summary to let Robin analyse it. Robin will use this same snapshot when answering questions.","Data updated · AI summary waiting for provider key · snapshot "+snapshotId);
+  }
+ }catch(e){
+  lastData=null;hist=null;
+  setSummary("Refresh failed. Robin has been blocked from using an old snapshot. Fix the source or connection issue, then refresh again.\\n\\n"+e.message,"Refresh failed · no current snapshot available.");
+  status.textContent="Refresh failed";
+  showError(e.message);
+ }finally{refreshButton.disabled=false}
+}
+$("ai-summary-refresh").onclick=generateAiSummary;
 function showError(msg){let e=$("err-main");if(!e){e=document.createElement("p");e.id="err-main";e.style.color="#b42318";$("panel-tonight").prepend(e)}e.textContent="Error: "+msg}
 $("refresh").onclick=runAnalysis;
 $("weather-route").onchange=e=>renderWeather(+e.target.value);
 document.querySelectorAll(".tab").forEach(b=>b.addEventListener("click",()=>{document.querySelectorAll(".tab").forEach(x=>x.setAttribute("aria-selected",String(x===b)));document.querySelectorAll(".panel").forEach(p=>p.classList.toggle("active",p.id==="panel-"+b.dataset.tab));if(b.dataset.tab==="weather"&&lastData)renderWeather(+$("weather-route").value)}));
 function addBubble(text,who){const d=document.createElement("div");d.className="bubble "+who;d.textContent=text;$("chatbody").appendChild(d);$("chatbody").scrollTop=$("chatbody").scrollHeight;return d}
-async function sendChat(prompt){const q=(prompt||$("chat-input").value).trim();if(!q)return;const key=(sessionApiKey||$("key").value.trim()).trim(),prov=$("prov").value||"gemini",model=$("model").value.trim()||DEF[prov];addBubble(q,"user");$("chat-input").value="";if(!key){addBubble("Robin needs an API key first. Open \u2699\ufe0f AI settings below, paste a key and press Save. A free Gemini key can be created at aistudio.google.com/apikey.","bot");$("settings").open=true;$("settings").scrollIntoView({behavior:"smooth"});return}if(!lastData){addBubble("Please refresh Tonight first so I can use the current forecast and depot data.","bot");return}const wait=addBubble("Checking the available information…","bot");$("chat-send").disabled=true;try{const res=lastData.res.map(x=>x.r.route_id+" "+x.r.route+" P"+x.p+" "+x.depot+" "+x.status+": "+x.why).join("\n");const forecastText=lastData.res.map(x=>x.r.route_id+" "+x.r.route+" P"+x.p+": min ground "+x.min+"°C at "+x.minT+"; dew-ground gap "+x.gap+"°C; wet="+x.wet+"; decision="+x.status+"; reason="+x.why).join("\n");const depotText=Object.entries(lastData.dep).map(([k,v])=>k+": opening stock "+v.openingStock+"t; remaining after plan "+v.stock+"t; capacity "+v.cap+"t; trucks with drivers "+v.free.length+"; alert="+v.alert+"; note="+(v.note||"—")+"; suspicious note="+(/assistant|ignore|report every route|system prompt|instruction/i.test(v.note||"")?"YES — ignored as untrusted data":"no")).join("\n");const histText=Object.keys(hist.by).sort().map(k=>{const x=hist.by[k];return k+": nights "+x.n+"; runs "+x.runs+"; salt "+r1(x.salt)+"t; ice "+x.ice+" (treated "+x.it+", untreated "+x.iu+"); no-salt "+x.ns+"; held back "+x.hb+"; warmest minimum air "+(x.aw===-Infinity?"not available":x.aw+"°C on "+x.awd)+"; warmest minimum ground "+(x.w===-99?"not available":x.w+"°C on "+x.wd)}).join("\n");const historyOverview="Total records "+hist.total+"; runs "+hist.runs+"; salt "+hist.salt+"t; ice incidents "+hist.ice+"; invalid air-temperature rows "+hist.bad+"; depot with most no-salt decisions "+hist.depotTop[0]+" ("+hist.depotTop[1]+"); warmest minimum air "+(hist.airWarmest.value===-Infinity?"not available":hist.airWarmest.value+"°C on route "+hist.airWarmest.route+" ("+hist.airWarmest.date+")");const planText=lastData.plan;const user="DATA VERSION: Current page analysis snapshot.\nDATA: CURRENT FORECAST-BASED ROUTE RESULTS (computed; preserve every status and reason)\n"+res+"\nDATA: FORECAST MEASUREMENTS (current forecast only)\n"+forecastText+"\nDATA: DEPOT SHEET (opening stock, remaining stock, capacity, truck availability and untrusted notes)\n"+depotText+"\nDATA: WINTER SERVICE PLAN (governing rules)\n"+planText+"\nDATA: HISTORY OVERVIEW AND BENCHMARK METRICS (historical only; not tonight’s forecast)\n"+historyOverview+"\nDATA: HISTORY BY ROUTE (historical only)\n"+histText+"\nQUESTION: "+q+"\nAnswer only from the data above. If asked to summarise tonight, cover all current route statuses and relevant depot constraints; do not substitute history for current decisions.";const a=await ask(prov,model,key,SYSTEM,user);wait.textContent=a.text;const pi=parseFloat($("pin").value),po=parseFloat($("pout").value);if(Number.isFinite(pi)&&Number.isFinite(po))addBubble("Token use: "+a.i+" input / "+a.o+" output · estimated cost "+(((a.i*pi+a.o*po)/1e6)*100).toFixed(3)+" US cents.","bot")}catch(e){wait.textContent="Assistant error: "+e.message}finally{$("chat-send").disabled=false}}
+async function sendChat(prompt){
+ const q=(prompt||$("chat-input").value).trim();if(!q)return;
+ const key=(sessionApiKey||$("key").value.trim()).trim(),prov=$("prov").value||"gemini",model=$("model").value.trim()||DEF[prov];
+ addBubble(q,"user");$("chat-input").value="";
+ if(!key){addBubble("Robin needs your own provider API key. Open AI settings, enter the key and press Save. The latest data snapshot will be used once the key is available.","bot");$("settings").open=true;return}
+ if(!lastData){addBubble("There is no valid current snapshot. Please refresh all data successfully before asking Robin.","bot");return}
+ const snapshotAtStart=lastData.snapshotId;
+ const wait=addBubble("Reading the latest Winter Watch snapshot…","bot");
+ $("chat-send").disabled=true;
+ try{
+  const promptText=buildAiContext(q);
+  const a=await ask(prov,model,key,SYSTEM,promptText);
+  if(!lastData||lastData.snapshotId!==snapshotAtStart)throw new Error("The data snapshot changed during this answer. Please ask again using the latest refresh.");
+  wait.textContent=a.text;
+  const pi=parseFloat($("pin").value),po=parseFloat($("pout").value);
+  if(Number.isFinite(pi)&&Number.isFinite(po))addBubble("Token use: "+a.i+" input / "+a.o+" output · estimated cost "+(((a.i*pi+a.o*po)/1e6)*100).toFixed(3)+" US cents.","bot");
+ }catch(e){wait.textContent="Assistant error: "+e.message}
+ finally{$("chat-send").disabled=false}
+}
 $("route-search").addEventListener("input",drawRouteTable);$("route-status").addEventListener("change",drawRouteTable);$("route-depot").addEventListener("change",drawRouteTable);$("clear-filters").onclick=()=>{$("route-search").value="";$("route-status").value="ALL";$("route-depot").value="ALL";drawRouteTable()};
 $("chat-launch").onclick=()=>{$("chatbox").classList.toggle("open");$("chat-launch").setAttribute("aria-expanded",String($("chatbox").classList.contains("open")))};$("chat-close").onclick=()=>{$("chatbox").classList.remove("open");$("chat-launch").setAttribute("aria-expanded","false")};$("chat-send").onclick=()=>sendChat();$("chat-input").addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();sendChat()}});document.querySelectorAll(".starter button").forEach(b=>b.onclick=()=>sendChat(b.dataset.prompt));
 runAnalysis();
-</script>
+>
 </body>
 </html>
