@@ -24,8 +24,11 @@
 .welcome-line span{font-size:13.5px;color:#d9e0d5}
 
 .shell{max-width:1240px;margin:0 auto;padding:18px clamp(14px,2.5vw,30px) 70px}
-.notice{display:flex;gap:14px;align-items:flex-start;background:linear-gradient(135deg,#fbf4e5,#fff9ed);border:1px solid #e9d8b4;border-left:5px solid #c99b51;color:#6b552d;border-radius:12px;padding:15px 18px;font-size:14.5px;margin-bottom:18px;box-shadow:var(--shadow)}
-.notice strong{white-space:nowrap;font-size:15px;font-family:Georgia,serif}
+
+/* SỬA: DUTY ENGINEER NOTICE NẰM ĐÚNG 1 DÒNG NGANG DUY NHẤT, GỌN GÀNG */
+.notice{display:flex;align-items:center;gap:16px;background:linear-gradient(135deg,#fbf4e5,#fff9ed);border:1px solid #e9d8b4;border-left:5px solid #c99b51;color:#6b552d;border-radius:12px;padding:14px 20px;font-size:14.5px;margin-bottom:18px;box-shadow:var(--shadow);white-space:nowrap;overflow-x:auto}
+.notice strong{font-size:15px;font-family:Georgia,serif;flex-shrink:0}
+.notice span{flex-shrink:0}
 
 .nav{display:flex;gap:8px;overflow-x:auto;padding:4px 0 13px;margin-bottom:16px}
 .tab{border:1px solid var(--line);background:#fbfaf5;color:#637067;border-radius:10px;padding:10px 18px;font-weight:750;white-space:nowrap;font-size:14.5px}
@@ -57,7 +60,6 @@
 .card-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px}
 .card-head h3{margin:0}
 
-/* CÁC KHỐI ĐÔI (TWO COLUMNS) LUÔN NẰM TRÊN 1 HÀNG NGANG */
 .two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:stretch;margin:16px 0}
 .two>.card{height:100%;margin:0}
 
@@ -110,9 +112,13 @@ select{min-width:160px}
 .route-filters #filter-count{margin:0 0 8px auto;font-size:13px}
 .dispatch-lead{font-weight:800;color:var(--ink);margin:0 0 8px;font-size:16px}
 
-/* STYLING NỘI DUNG FORECAST CHECKS VÀ INTERPRETATION */
-#weather-detail p, .two .card p{background:#f8f9f4;border:1px solid #e5e3d7;border-radius:10px;padding:11px 14px;margin:10px 0;font-size:14.5px;line-height:1.65}
-#weather-detail p strong, .two .card p strong{color:var(--navy);font-weight:750}
+/* SỬA: FORECAST CHECKS NẰM TRÊN CÙNG MỘT HÀNG / KHỐI NGANG LIỀN MẠCH, KHÔNG BỊ TÁCH RỜI KHUNG DỌC */
+#weather-detail{display:flex;flex-direction:column;gap:10px}
+#weather-detail p{background:#f8f9f4;border:1px solid #e5e3d7;border-radius:9px;padding:10px 14px;margin:0;font-size:14px;line-height:1.55;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+#weather-detail p strong{color:var(--navy);font-weight:750;flex-shrink:0}
+
+.two .card p{background:#f8f9f4;border:1px solid #e5e3d7;border-radius:9px;padding:10px 14px;margin:10px 0;font-size:14px;line-height:1.6}
+.two .card p strong{color:var(--navy);font-weight:750}
 
 /* Chat Assistant Floating Drawer & UI */
 .chat-launch{display:flex!important;align-items:center;gap:10px;position:fixed!important;right:22px!important;bottom:20px!important;z-index:40!important;border:1px solid #fff;border-radius:22px;background:var(--pine);color:white;padding:10px 16px 10px 10px;font-weight:800;box-shadow:0 7px 24px rgba(24,53,68,0.22);text-align:left}
@@ -181,7 +187,6 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:24px 10px 5px
 <section class="panel" id="panel-weather">
 <div class="heading"><div><h2>Weather conditions</h2><p class="sub">Soil temperature, dew point and precipitation for each monitored route.</p></div><span class="muted" id="weather-state">Refresh Tonight to load forecast</span></div>
 <div class="card"><div class="card-head"><h3>Route forecast</h3><select id="weather-route" aria-label="Select route"><option value="0">R01 · N3 Cavan Bypass</option></select></div><div class="chartbox"><canvas id="weather-chart" aria-label="Hourly weather chart"></canvas></div><p class="muted">Ground temperature uses soil_temperature_0cm. The night window is 18:00 to 08:00. Precipitation is shown separately from temperature.</p></div>
-<!-- ĐÃ GOM NHÓM NẰM CHUNG TRÊN 1 HÀNG NGANG (2 CỘT SONG SONG) -->
 <div class="two">
 <div class="card"><h3>Forecast checks</h3><div id="weather-detail" class="empty">Forecast details will appear after refresh.</div></div>
 <div class="card"><h3>Weather notes & rules</h3><p><strong>Temperature threshold:</strong> P1 routes trigger at 1°C, P2 at 0.5°C, P3 at -1°C.</p><p><strong>Wet conditions:</strong> Triggered if precipitation is above 0 or dew point is within 1°C of ground temperature.</p><p class="muted">All calculations use hourly Open-Meteo data mapped directly to the local Cavan time zone.</p></div>
@@ -203,7 +208,6 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:24px 10px 5px
 <div class="metric"><div class="label">HISTORICAL RECORDS</div><div class="value" id="h-rows">—</div></div><div class="metric"><div class="label">GRITTING RUNS</div><div class="value" id="h-runs">—</div></div><div class="metric"><div class="label">SALT USED</div><div class="value" id="h-salt">—</div><div class="hint">Tonnes across five winters</div></div><div class="metric"><div class="label">ICE INCIDENTS</div><div class="value" id="h-ice">—</div><div class="hint">Historical reported incidents</div></div>
 </div>
 <div class="card"><h3>Route history</h3><div class="wrap"><table id="hs"><thead><tr><th>Route</th><th>Priority</th><th>Depot</th><th>Nights</th><th>Runs</th><th>Salt t</th><th>Ice</th><th>Ice treated</th><th>Ice untreated</th><th>No salt</th><th>Held back</th><th>Ground ≤0</th></tr></thead><tbody></tbody></table></div><p class="muted" id="hnote"></p></div>
-<!-- ĐÃ GOM NHÓM NẰM CHUNG TRÊN 1 HÀNG NGANG (2 CỘT SONG SONG) -->
 <div class="two">
 <div class="card"><h3>Key historical findings</h3><div id="history-findings" class="empty">Findings will appear after refresh.</div></div>
 <div class="card"><h3>Interpretation for the engineer</h3><p><strong>R10 · R162 Kingscourt Hill:</strong> historical incidents and stock-related holds indicate a candidate for reviewing stock allocation or supply arrangements. This does not automatically establish a higher route priority.</p><p><strong>R05 · R165 Bailieborough Road:</strong> investigate the recurring Killinkere bridge reports as a route-specific issue. Do not increase priority solely from those incidents.</p><p class="muted">Historical associations are not proof that a treatment decision caused or prevented an incident. The incident count is relatively small.</p></div>
@@ -366,7 +370,7 @@ function renderWeather(i){
   ["Dew point minus ground at minimum:",x.gap+"°C. Wet condition: "+(x.wet?"detected":"not detected")+"."],
   ["First 0°C crossing:",(x.zero?x.zero.slice(11,16):"No crossing forecast")+"."],
   ["Rule result:",x.status]
- ].forEach(([label,value])=>{const p=document.createElement("p"),strong=document.createElement("strong");strong.textContent=label+" ";p.append(strong,document.createTextNode(value));detail.appendChild(p)});
+ ].forEach(([label,value])=>{const p=document.createElement("p"),strong=document.createElement("strong");strong.textContent=label;p.append(strong,document.createTextNode(value));detail.appendChild(p)});
  drawChart(hours);
 }
 function drawChart(hours){
@@ -400,7 +404,7 @@ async function runAnalysis(){
 }
 $("refresh").onclick=runAnalysis;
 $("weather-route").onchange=e=>renderWeather(+e.target.value);
-document.querySelectorAll(".tab").forEach(b=>b.addEventListener("click",()=>{document.querySelectorAll(".tab").forEach(x=>x.setAttribute("aria-selected",String(x===b)));document.querySelectorAll(".panel").forEach(p=>p.classList.toggle("active",p.id==="panel-"+b.dataset.tab));if(b.dataset.tab==="weather"&&lastData)renderWeather(+$("weather-route").value)}));
+document.querySelectorAll(".tab").forEach(b=>b.addEventListener("click",()=>{document.querySelectorAll(".tab").forEach(x=>x.setAttribute("aria-selected",String(x===b)));document.querySelectorAll(".panel").forEach(p=>p.classList.toggle("active",p.id=="panel-"+b.dataset.tab));if(b.dataset.tab==="weather"&&lastData)renderWeather(+$("weather-route").value)}));
 function addBubble(text,who){const d=document.createElement("div");d.className="bubble "+who;d.textContent=text;$("chatbody").appendChild(d);$("chatbody").scrollTop=$("chatbody").scrollHeight;return d}
 async function sendChat(prompt){
   const q=(prompt||$("chat-input").value).trim();if(!q)return;
