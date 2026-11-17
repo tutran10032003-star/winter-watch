@@ -226,6 +226,199 @@ footer{color:var(--muted)!important}
 }
 @media(prefers-reduced-motion:reduce){tbody tr{transition:none}}
 
+
+:root{
+  --navy:#203746;--navy2:#2d4b5b;--pine:#285b49;--pine2:#34745b;
+  --red:#a94343;--gold:#c49a55;--ice:#eaf1f4;--snow:#fff;
+  --bg:#f2f6f8;--ink:#203746;--muted:#546975;--line:#dce6eb;
+  --green:#28744f;--amber:#94651c;--danger:#b4232d;
+  --shadow:0 4px 20px rgba(22,48,64,.045)
+}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}button,input,select,textarea{font:inherit}button{cursor:pointer}
+.top{background:linear-gradient(115deg,#203746 0%,#285b49 100%);color:white;padding:18px clamp(16px,3vw,40px) 20px;position:relative}
+.brand{display:flex;align-items:center;justify-content:space-between;gap:18px;position:relative;z-index:1}
+.brand h1{margin:0;font-size:clamp(25px,3vw,34px);letter-spacing:-.7px;font-family:Georgia,serif;font-weight:600}
+.brand p{margin:4px 0 0;color:#e6eee6;font-size:14px}
+.brand-mark{display:flex;align-items:center;gap:14px}
+.robin-mark{width:64px;height:64px;min-width:64px;display:grid;place-items:center;background:#f7e9d4;border-radius:50%;box-shadow:0 4px 14px rgba(7,26,21,0.2);overflow:visible;position:relative}
+.robin-svg{width:60px;height:60px;overflow:visible;transform-origin:50% 80%;animation:robin-bob 2.8s ease-in-out infinite}
+@keyframes robin-bob{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-4px) rotate(2deg)}}
+.top-right{display:flex;align-items:center;gap:8px}
+.live{border:1px solid #a8d8c0;background:#285b49;color:#e7fff0;padding:5px 10px;border-radius:99px;font-size:11px;font-weight:800;letter-spacing:.08em}
+.welcome-line{max-width:700px;margin-top:12px;padding:10px 14px;border-left:3px solid #c49a55;background:linear-gradient(90deg,rgba(255,255,255,0.08),transparent);border-radius:0 8px 8px 0}
+.welcome-kicker{font-size:10px;letter-spacing:.16em;font-weight:800;color:#e5c98d;display:block;margin-bottom:2px}
+.welcome-line strong{font:600 clamp(19px,2.4vw,25px)/1.2 Georgia,serif;color:#fffaf0;display:block}
+.welcome-line span{font-size:13px;color:#e2ece4}
+
+.shell{max-width:1240px;margin:0 auto;padding:18px clamp(14px,2.5vw,30px) 60px}
+.notice{display:flex;gap:10px;align-items:flex-start;background:#fff8e9;border:1px solid #eadcbf;color:#694d16;border-radius:12px;padding:12px 15px;font-size:14px;margin-bottom:16px}
+.notice strong{white-space:nowrap}
+
+.nav{display:flex;gap:8px;overflow-x:auto;padding:4px 0 12px;margin-bottom:12px}
+.tab{border:1px solid var(--line);background:#fff;color:var(--muted);border-radius:10px;padding:10px 16px;font-weight:700;white-space:nowrap;font-size:14px}
+.tab[aria-selected=true]{background:var(--navy);border-color:var(--navy);color:white;box-shadow:0 3px 12px rgba(32,55,70,0.12)}
+.panel{display:none}.panel.active{display:block}
+
+.heading{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin:12px 0 14px}
+.heading h2{font-size:22px;color:var(--navy);margin:0;font-family:Georgia,serif;font-weight:600}
+.sub{font-size:13.5px;color:var(--muted);margin:3px 0 0}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+
+.btn{border:0;border-radius:9px;padding:9px 14px;background:var(--pine);color:white;font-weight:750;font-size:14px}
+.btn:hover{background:var(--pine2)}
+.btn.secondary{background:white;border:1px solid var(--line);color:var(--navy)}
+.btn.red{background:var(--red)}
+
+.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.metric{background:#fff;border:1px solid var(--line);border-radius:16px;padding:17px 18px;box-shadow:var(--shadow);min-width:0}
+.metric .label{font-size:12px;color:var(--muted);font-weight:700;letter-spacing:.02em}
+.metric:nth-child(1) .label:before{content:"❄  ";color:#668da0}
+.metric:nth-child(2) .label:before{content:"✓  ";color:#39815c}
+.metric:nth-child(3) .label:before{content:"⚠  ";color:#b17b32}
+.metric:nth-child(4) .label:before{content:"↻  ";color:#668da0}
+.metric .value{font-size:29px;font-weight:850;color:var(--navy);line-height:1.2;margin:5px 0}
+.metric .hint{font-size:12px;color:var(--muted)}
+
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px;box-shadow:var(--shadow);margin:14px 0}
+.card h3{font-size:17px;color:var(--navy);margin:0 0 12px;font-family:Georgia,serif;font-weight:600}
+.card-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:10px}
+.card-head h3{margin:0}
+
+.chip{display:inline-flex;align-items:center;justify-content:center;min-width:58px;padding:3px 9px;border-radius:99px;font-size:11px;font-weight:850}
+.chip.TREAT{background:#dcefe1;color:#17633a}
+.chip.NO{background:#e7efe5;color:#315b46}
+.chip.CHECK{background:#fff0d5;color:#8b5a0b}
+.chip.HOLD{background:#eee6d9;color:#74532a}
+.chip.FLAG{background:#f7e0dd;color:#9a3833}
+
+.wrap{overflow:auto;border:1px solid var(--line);border-radius:11px;background:#fff}
+table{border-collapse:collapse;width:100%;font-size:13px;min-width:640px}
+th{background:#edf3f6;color:#385362;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.04em}
+th,td{padding:10px 11px;border-bottom:1px solid #e8eef1;vertical-align:top}
+tr:last-child td{border-bottom:0}td{color:#294453}
+tbody tr{transition:background-color .16s ease}
+tbody tr:hover td{background:#f3f7f9!important}
+tbody tr:has(.chip.TREAT) td{background:#f0f8f2}
+tbody tr:has(.chip.HOLD) td{background:#fff8e9}
+tbody tr:has(.chip.FLAG) td{background:#fff2f1}
+tbody tr:has(.chip.CHECK) td{background:#fffaf0}
+td.reason{white-space:normal;min-width:210px;font-size:13.5px}
+
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:stretch}
+.two>.card{height:100%;margin:0}
+.empty{padding:22px;text-align:center;color:var(--muted);font-size:14px}
+.muted{color:var(--muted);font-size:13px}
+
+.barline{height:9px;background:#eaf1f4;border-radius:99px;overflow:hidden;min-width:80px;margin-top:6px}
+.barline span{display:block;height:100%;border-radius:99px;background:var(--pine)}
+.depot-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.depot{border:1px solid var(--line);border-radius:12px;padding:14px;background:#fff}
+.depot-top{display:flex;justify-content:space-between;gap:8px;font-weight:800;color:var(--navy)}
+.depot small{color:var(--muted)}
+
+select,input,textarea{border:1px solid var(--line);border-radius:9px;padding:9px 11px;background:white;color:var(--ink);max-width:100%;font-size:14px}
+select:focus-visible,input:focus-visible,textarea:focus-visible,button:focus-visible{outline:3px solid #8ac4df;outline-offset:2px}
+select{min-width:160px}
+.chartbox{height:250px;position:relative}.chartbox canvas{width:100%;height:100%}
+
+.settings{margin-top:16px}
+.settings summary{cursor:pointer;font-weight:800;color:var(--navy);font-family:Georgia,serif;font-size:16px}
+.settings-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:14px}
+.field label{display:block;font-size:13px;color:var(--muted);margin-bottom:5px;font-weight:700}
+.field input,.field select{width:100%;min-height:42px}
+.settings-help{font-size:13.5px;line-height:1.6;background:#f1f6f8;padding:12px 14px;border-radius:10px;margin-top:10px}
+
+#err{color:var(--danger);font-size:13.5px;margin:8px 0}
+.route-filters{display:flex;align-items:end;gap:12px;flex-wrap:wrap;padding:12px 0 14px}
+.route-filters label{display:flex;flex-direction:column;gap:5px;font-size:12px;font-weight:750;color:var(--muted);min-width:160px}
+.route-filters input,.route-filters select{background:#fff}
+.route-filters #filter-count{margin:0 0 8px auto;font-size:13px}
+.dispatch-lead{font-weight:800;color:var(--ink);margin:0 0 8px;font-size:16px}
+
+/* Chat Assistant Floating Drawer & UI */
+.chat-launch{display:flex!important;align-items:center;gap:10px;position:fixed!important;right:22px!important;bottom:20px!important;z-index:40!important;border:1px solid #fff;border-radius:22px;background:var(--pine);color:white;padding:10px 16px 10px 10px;font-weight:800;box-shadow:0 7px 24px rgba(24,53,68,0.22);text-align:left}
+.chat-launch:hover{background:var(--pine2)}
+.launcher-bird{width:40px;height:40px;min-width:40px;border-radius:50%;background:#f7e9d4;display:grid;place-items:center;box-shadow:0 2px 8px rgba(0,0,0,0.15)}
+.launcher-bird .robin-svg{width:36px;height:36px}
+.chat-launch strong,.chat-launch small{display:block}
+.chat-launch strong{font-size:14px}
+.chat-launch small{font-size:11px;font-weight:500;opacity:0.9}
+.launcher-arrow{font-size:18px;margin-left:6px}
+
+.chatbox{position:fixed!important;z-index:50!important;right:22px!important;bottom:86px!important;width:min(410px,calc(100vw - 28px))!important;height:min(600px,calc(100vh - 110px))!important;background:#fff!important;border:1px solid var(--line);border-radius:18px;box-shadow:0 18px 55px rgba(22,48,64,0.2);display:none;flex-direction:column;overflow:hidden}
+.chatbox.open{display:flex!important}
+.chathead{background:linear-gradient(110deg,#203746,#285b49);color:white;padding:15px 16px;display:flex;justify-content:space-between;align-items:center}
+.chat-identity{display:flex;align-items:center;gap:11px}
+.chat-robin{width:46px!important;height:46px!important;min-width:46px!important;background:#f7e9d4;box-shadow:0 3px 9px rgba(7,26,21,0.2)}
+.chat-robin .robin-svg{width:42px!important;height:42px!important}
+.chathead strong{font-size:15px;display:block}
+.chat-subtitle{font-size:12px;color:#d6e5dc;margin-top:2px}
+.chathead button{border:0;background:transparent;color:white;font-size:22px}
+
+.chatbody{padding:14px;overflow:auto;flex:1;background:#f4f8fa}
+.bubble{max-width:92%;padding:11px 14px;border-radius:12px;margin:8px 0;font-size:14px;line-height:1.55;white-space:pre-wrap;overflow-wrap:anywhere}
+.bubble.bot{background:#fff;border:1px solid var(--line);border-top-left-radius:3px;color:var(--ink)}
+.bubble.user{background:#e7f0f4;margin-left:auto;border-top-right-radius:3px;color:var(--ink)}
+.starter{display:grid;gap:7px;margin:8px 0}
+.starter button{font-size:12.5px;border:1px solid var(--line);background:#fffaf4;color:var(--navy);border-radius:99px;padding:8px 12px;text-align:left;font-weight:600}
+.starter button:hover{background:#f5ebd8}
+.chat-compose{border-top:1px solid var(--line);padding:11px;display:flex;gap:8px;background:#fff}
+.chat-compose textarea{resize:none;min-height:42px;max-height:100px;flex:1;font-size:14px;line-height:1.45}
+.chat-compose button{border:0;border-radius:9px;background:var(--pine);color:white;padding:0 15px;font-weight:800;font-size:14px}
+
+footer{text-align:center;color:var(--muted);font-size:12px;padding:24px 10px 5px}
+
+#dispatch p,#history-findings p,#weather-detail p{font-size:14.5px!important;line-height:1.65!important;text-align:left;margin:8px 0}
+#dispatch .muted,#history-findings .muted{font-size:13px!important}
+
+@media(max-width:760px){
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .two{grid-template-columns:1fr}
+  .settings-grid{grid-template-columns:1fr}
+  .brand{align-items:flex-start}
+  .shell{padding:13px 12px 70px}
+  .chat-launch{right:14px!important;bottom:14px!important}
+  .chatbox{right:12px!important;bottom:76px!important;width:calc(100vw - 24px)!important;height:min(560px,calc(100vh - 94px))!important}
+}
+
+/* Readability and consistent Robin identity */
+body{font-size:16px;line-height:1.65}
+.brand p,.welcome-line span{font-size:14px}
+.notice{font-size:15px;line-height:1.6}
+.tab,.btn{font-size:15px}
+.heading h2{font-size:24px}
+.sub{font-size:15px}
+.metric .label{font-size:13px}
+.metric .value{font-size:30px}
+.metric .hint{font-size:13px}
+.card h3{font-size:18px}
+table{font-size:14px}
+th{font-size:12px}
+th,td{padding:11px 12px}
+td.reason{font-size:14px;min-width:230px}
+.chip{font-size:12px}
+.muted,.settings-help{font-size:14px}
+.field label,.route-filters label{font-size:14px}
+select,input,textarea{font-size:15px}
+.dispatch-lead{font-size:17px}
+#dispatch p,#history-findings p,#weather-detail p{font-size:15px!important}
+#dispatch .muted,#history-findings .muted{font-size:14px!important}
+.chathead strong{font-size:16px}
+.chat-subtitle{font-size:13px}
+.bubble{font-size:15px;line-height:1.6}
+.starter button{font-size:14px}
+.chat-compose textarea,.chat-compose button{font-size:15px}
+footer{font-size:13px}
+.launcher-bird{overflow:hidden}
+.launcher-bird .robin-svg{display:block;width:38px;height:38px}
+@media(max-width:760px){
+ body{font-size:15.5px}
+ .metric .value{font-size:25px}
+ table{font-size:13.5px}
+ th,td{padding:10px}
+ .heading h2{font-size:22px}
+}
+
 </style>
 </head>
 <body>
@@ -285,7 +478,26 @@ footer{color:var(--muted)!important}
 <footer>Winter Watch · Fictional County Cavan decision-support prototype · Open-Meteo forecast data</footer>
 </main>
 
-<button class="chat-launch" id="chat-launch" aria-expanded="false"><span class="launcher-bird">🐦</span><span><strong>Ask Robin</strong><small>Tap to ask a question</small></span><span class="launcher-arrow">↗</span></button>
+<button class="chat-launch" id="chat-launch" aria-expanded="false">
+  <span class="launcher-bird">
+    <svg class="robin-svg" viewBox="0 0 100 100">
+      <ellipse cx="48" cy="55" rx="35" ry="34" fill="#986044"/>
+      <ellipse cx="56" cy="62" rx="25" ry="25" fill="#f7e9d4"/>
+      <ellipse cx="47" cy="43" rx="31" ry="29" fill="#a96d4c"/>
+      <ellipse cx="57" cy="54" rx="25" ry="27" fill="#e65a37"/>
+      <ellipse cx="55" cy="69" rx="23" ry="18" fill="#f5dfc3"/>
+      <path d="M76 38 94 45 76 51Z" fill="#e7ad42"/>
+      <ellipse cx="66" cy="36" rx="5" ry="7" fill="#24352e"/>
+      <circle cx="67.5" cy="33.5" r="2" fill="#fff"/>
+      <path d="M30 82q-7 9-14 7m28-3q-3 9-10 9" fill="none" stroke="#8c593e" stroke-width="4" stroke-linecap="round"/>
+      <path d="M17 52q-10-8-12-2 5 10 15 8" fill="#80513c"/>
+      <path d="M35 24q8-10 18-8" fill="none" stroke="#d9a27a" stroke-width="4" stroke-linecap="round"/>
+    </svg>
+  </span>
+  <span><strong>Ask Robin</strong><small>Tap to ask a question</small></span>
+  <span class="launcher-arrow">↗</span>
+</button>
+
 <aside class="chatbox" id="chatbox" aria-label="Winter Watch AI assistant">
 <div class="chathead"><div class="chat-identity"><span class="robin-mark chat-robin" aria-hidden="true"><svg class="robin-svg" viewBox="0 0 100 100"><ellipse cx="48" cy="55" rx="35" ry="34" fill="#986044"/><ellipse cx="56" cy="62" rx="25" ry="25" fill="#f7e9d4"/><ellipse cx="47" cy="43" rx="31" ry="29" fill="#a96d4c"/><ellipse cx="57" cy="54" rx="25" ry="27" fill="#e65a37"/><ellipse cx="55" cy="69" rx="23" ry="18" fill="#f5dfc3"/><path d="M76 38 94 45 76 51Z" fill="#e7ad42"/><ellipse cx="66" cy="36" rx="5" ry="7" fill="#24352e"/><circle cx="67.5" cy="33.5" r="2" fill="#fff"/><path d="M30 82q-7 9-14 7m28-3q-3 9-10 9" fill="none" stroke="#8c593e" stroke-width="4" stroke-linecap="round"/><path d="M17 52q-10-8-12-2 5 10 15 8" fill="#80513c"/><path d="M35 24q8-10 18-8" fill="none" stroke="#d9a27a" stroke-width="4" stroke-linecap="round"/></svg></span><div><strong>Robin · Winter Assistant</strong><div class="chat-subtitle">Explains the rules; does not make decisions</div></div></div><button id="chat-close" aria-label="Close chat">×</button></div>
 <div class="chatbody" id="chatbody"><div class="bubble bot">Hi! I can explain tonight's route recommendations, depot constraints and historical patterns. The Duty Engineer always makes the final decision.</div><div class="starter"><button data-prompt="Summarise tonight's recommended route decisions.">Tonight's summary</button><button data-prompt="Which routes need engineer attention and why?">Routes to review</button><button data-prompt="What does the history suggest about R10 and R05?">History insights</button></div></div>
@@ -296,7 +508,7 @@ footer{color:var(--muted)!important}
 const BASE="https://bdaib-hub.pages.dev/data/winter/";
 const SRC={depots:BASE+"tonight.csv",routes:BASE+"routes.csv",plan:BASE+"plan.md",hist:BASE+"history.csv"};
 const LIMIT={1:1.0,2:0.5,3:-1.0},CAP0={Cavan:900,Ballyjamesduff:420,Bailieborough:18,Cootehill:300,Virginia:320};
-const $=id=>document.getElementById(id),DEF={openai:"gpt-4o-mini",anthropic:"claude-haiku-5-5",gemini:"gemini-3.8-flash",groq:"llama-3.3-70b-versatile"};
+const $=id=>document.getElementById(id),DEF={openai:"gpt-4o-mini",anthropic:"claude-haiku-5-5",gemini:"gemini-2.5-flash",groq:"llama-3.3-70b-versatile"};
 let hist=null,lastData=null,lastUserText="";
 function csv(t){const rows=[];let r=[],c="",q=false;for(let i=0;i<t.length;i++){const ch=t[i];if(q){if(ch==='"'){if(t[i+1]==='"'){c+='"';i++}else q=false}else c+=ch}else if(ch==='"')q=true;else if(ch===","){r.push(c);c=""}else if(ch==="\n"||ch==="\r"){if(ch==="\r"&&t[i+1]==="\n")i++;r.push(c);rows.push(r);r=[];c=""}else c+=ch}if(c||r.length){r.push(c);rows.push(r)}const h=(rows.shift()||[]).map(x=>x.trim());return rows.filter(x=>x.length>1).map(x=>Object.fromEntries(h.map((k,i)=>[k,(x[i]||"").trim()])))}
 async function get(url,type){const r=await fetch(url,{cache:"no-store"});if(!r.ok)throw new Error(url+" returned "+r.status);return type==="json"?r.json():r.text()}
@@ -332,7 +544,39 @@ const SYSTEM="You are Robin, the Winter Watch assistant for a fictional County C
 function readSavedSettings(){try{return JSON.parse(localStorage.getItem("ww")||"{}")}catch(e){return {}}}
 function loadSettings(){const s=readSavedSettings();$("prov").value=s.prov||"gemini";$("model").value=s.model||DEF[$("prov").value];$("key").value=s.key||"";$("pin").value=s.pin||"";$("pout").value=s.pout||"";$("saved").textContent=s.key?"Settings and API key loaded from this browser.":"Settings loaded, but no API key is saved yet."}
 $("prov").onchange=()=>$("model").value=DEF[$("prov").value];$("save").onclick=()=>{try{const config={prov:$("prov").value,model:$("model").value.trim()||DEF[$("prov").value],key:$("key").value.trim(),pin:$("pin").value,pout:$("pout").value};localStorage.setItem("ww",JSON.stringify(config));$("saved").textContent=config.key?"Settings and API key saved in this browser. Robin is ready to connect.":"Settings saved, but the API key field is empty. Paste your key before asking Robin."; }catch(e){$("saved").textContent="Could not save settings: "+e.message}};$("forget").onclick=()=>{try{localStorage.removeItem("ww")}catch(e){}$("key").value="";$("saved").textContent="Saved key removed."};loadSettings();
-async function ask(prov,model,key,system,user){let url,h={"Content-Type":"application/json"},b;if(prov==="openai"||prov==="groq"){url=prov==="openai"?"https://api.openai.com/v1/chat/completions":"https://api.groq.com/openai/v1/chat/completions";h.Authorization="Bearer "+key;b={model,messages:[{role:"system",content:system},{role:"user",content:user}]}}else if(prov==="anthropic"){url="https://api.anthropic.com/v1/messages";h["x-api-key"]=key;h["anthropic-version"]="2023-06-01";h["anthropic-dangerous-direct-browser-access"]="true";b={model,max_tokens:1500,system,messages:[{role:"user",content:user}]}}else{url="https://generativelanguage.googleapis.com/v1beta/models/"+encodeURIComponent(model)+":generateContent";h["x-goog-api-key"]=key;b={systemInstruction:{parts:[{text:system}]},contents:[{role:"user",parts:[{text:user}]}]}}const r=await fetch(url,{method:"POST",headers:h,body:JSON.stringify(b)}),t=await r.text();if(!r.ok)throw new Error(prov+" "+r.status+": "+t);const j=JSON.parse(t);if(prov==="anthropic")return{text:j.content.map(c=>c.text||"").join(""),i:j.usage.input_tokens,o:j.usage.output_tokens};if(prov==="gemini")return{text:j.candidates[0].content.parts.map(p=>p.text||"").join(""),i:j.usageMetadata.promptTokenCount,o:j.usageMetadata.candidatesTokenCount};return{text:j.choices[0].message.content,i:j.usage.prompt_tokens,o:j.usage.completion_tokens}}
+async function ask(prov,model,key,system,user){
+  let url,h={"Content-Type":"application/json"},b;
+  if(!key)throw new Error("API key is empty. Open AI settings and save a key for the selected provider.");
+  if(!model)throw new Error("No model is selected. Choose a model in AI settings.");
+  if(prov==="openai"||prov==="groq"){
+    url=prov==="openai"?"https://api.openai.com/v1/chat/completions":"https://api.groq.com/openai/v1/chat/completions";
+    h.Authorization="Bearer "+key;b={model,messages:[{role:"system",content:system},{role:"user",content:user}]};
+  }else if(prov==="anthropic"){
+    url="https://api.anthropic.com/v1/messages";h["x-api-key"]=key;h["anthropic-version"]="2023-06-01";h["anthropic-dangerous-direct-browser-access"]="true";
+    b={model,max_tokens:1500,system,messages:[{role:"user",content:user}]};
+  }else if(prov==="gemini"){
+    url="https://generativelanguage.googleapis.com/v1beta/models/"+encodeURIComponent(model)+":generateContent";
+    h["x-goog-api-key"]=key;b={systemInstruction:{parts:[{text:system}]},contents:[{role:"user",parts:[{text:user}]}]};
+  }else throw new Error("Unknown AI provider: "+prov);
+  let r,t,j;
+  try{r=await fetch(url,{method:"POST",headers:h,body:JSON.stringify(b)});t=await r.text()}catch(e){throw new Error("Could not reach "+prov+". Check your connection or browser network restrictions. "+e.message)}
+  try{j=JSON.parse(t)}catch(e){throw new Error(prov+" returned a non-JSON response (HTTP "+r.status+"). "+t.slice(0,500))}
+  if(!r.ok){const detail=j.error?.message||j.message||t.slice(0,700);throw new Error(prov+" API error "+r.status+": "+detail)}
+  if(prov==="anthropic"){
+    const textOut=(j.content||[]).map(c=>c.text||"").join("").trim();
+    if(!textOut)throw new Error("Anthropic returned no text. Stop reason: "+(j.stop_reason||"not supplied"));
+    return{text:textOut,i:j.usage?.input_tokens??0,o:j.usage?.output_tokens??0};
+  }
+  if(prov==="gemini"){
+    const candidate=j.candidates?.[0],textOut=(candidate?.content?.parts||[]).map(p=>p.text||"").join("").trim();
+    if(!textOut){const reason=candidate?.finishReason||j.promptFeedback?.blockReason||"no candidate text";throw new Error("Gemini returned no answer ("+reason+"). Check the selected model and prompt safety feedback.");}
+    return{text:textOut,i:j.usageMetadata?.promptTokenCount??0,o:j.usageMetadata?.candidatesTokenCount??0};
+  }
+  const textOut=j.choices?.[0]?.message?.content;
+  if(typeof textOut!=="string"||!textOut.trim())throw new Error(prov+" returned no answer text.");
+  return{text:textOut,i:j.usage?.prompt_tokens??0,o:j.usage?.completion_tokens??0};
+}
+
 function showStatus(s){return '<span class="chip '+s+'">'+s+'</span>'}
 let routeResults=[];function drawRouteTable(){const q=$("route-search").value.trim().toLowerCase(),status=$("route-status").value,depot=$("route-depot").value;const rows=routeResults.filter(x=>(status==="ALL"||x.status===status)&&(depot==="ALL"||x.depot===depot)&&(!q||(x.r.route_id+" "+x.r.route+" "+x.depot).toLowerCase().includes(q)));$("filter-count").textContent=rows.length+" of "+routeResults.length+" routes";table($("rt"),["Route","Name","Priority","Depot","Min ground °C","Wet?","Decision","Reason / departure"],rows.map(x=>[x.r.route_id,x.r.route,"P"+x.p,x.depot,x.min===null?"—":x.min+"°",x.wet?"Yes":"No",{text:x.status,cls:"chip "+x.status},x.why]));if(!rows.length){const tr=$("rt").tBodies[0].insertRow();const td=tr.insertCell();td.colSpan=8;td.textContent="No routes match these filters.";td.className="empty"}}
 function renderTonight(data){const {res,dep}=data;routeResults=res;$("m-routes").textContent=res.length;$("m-treat").textContent=res.filter(x=>x.status==="TREAT").length;$("m-alert").textContent=res.filter(x=>["CHECK","HOLD","FLAG"].includes(x.status)).length;$("m-restock").textContent=Object.values(dep).filter(x=>x.alert).length;
