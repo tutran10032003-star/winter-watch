@@ -932,9 +932,9 @@ function buildAiContext(question){
    by_route:historyRows
   }
  };
- return "LATEST WINTER WATCH DATA SNAPSHOT (JSON)\\n"+JSON.stringify(snapshot,null,2)+
-  "\\n\\nUSER TASK / QUESTION\\n"+question+
-  "\\n\\nAnalyse only this snapshot. State clearly which findings come from current forecast, current depot/source data, calculated decisions, or historical records. Do not treat historical incidents as proof of causation. Do not invent missing values.";
+ return "LATEST WINTER WATCH DATA SNAPSHOT (JSON)\n"+JSON.stringify(snapshot,null,2)+
+  "\n\nUSER TASK / QUESTION\n"+question+
+  "\n\nAnalyse only this snapshot. State clearly which findings come from current forecast, current depot/source data, calculated decisions, or historical records. Do not treat historical incidents as proof of causation. Do not invent missing values.";
 }
 function setSummary(text,status){
  $("ai-summary").textContent=text;
@@ -991,7 +991,7 @@ async function runAnalysis(){
   }
  }catch(e){
   lastData=null;hist=null;
-  setSummary("Refresh failed. Robin has been blocked from using an old snapshot. Fix the source or connection issue, then refresh again.\\n\\n"+e.message,"Refresh failed · no current snapshot available.");
+  setSummary("Refresh failed. Robin has been blocked from using an old snapshot. Fix the source or connection issue, then refresh again.\n\n"+e.message,"Refresh failed · no current snapshot available.");
   status.textContent="Refresh failed";
   showError(e.message);
  }finally{refreshButton.disabled=false}
